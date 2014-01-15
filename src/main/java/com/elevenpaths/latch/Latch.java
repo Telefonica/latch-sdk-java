@@ -16,7 +16,7 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA*/
 
 
-package com.elevenpaths.latch;
+package main.java.com.elevenpaths.latch;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -33,7 +33,7 @@ import com.ning.http.util.Base64;
 
 public class Latch {
 	private static final String API_VERSION = "0.6";
-      public static String API_HOST = "https://latch.elevenpaths.com";
+    public static String API_HOST = "https://latch.elevenpaths.com";
 	public static final String API_CHECK_STATUS_URL = "/api/"+API_VERSION+"/status";
 	public static final String API_PAIR_URL = "/api/"+API_VERSION+"/pair";
 	public static final String API_PAIR_WITH_ID_URL = "/api/"+API_VERSION+"/pairWithId";
