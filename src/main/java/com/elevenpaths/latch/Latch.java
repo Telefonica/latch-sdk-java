@@ -134,6 +134,10 @@ public class Latch {
 		return HTTP_GET_proxy(new StringBuilder(API_CHECK_STATUS_URL).append("/").append(accountId).toString());
 	}
 
+	public LatchResponse operationStatus(String accountId, String operationId) {
+		return HTTP_GET_proxy(new StringBuilder(API_CHECK_STATUS_URL).append("/").append(accountId).append("/op/").append(operationId).toString());
+	}
+
 	public LatchResponse unpair(String id) {
 		return HTTP_GET_proxy(new StringBuilder(API_UNPAIR_URL).append("/").append(id).toString());
 	}
