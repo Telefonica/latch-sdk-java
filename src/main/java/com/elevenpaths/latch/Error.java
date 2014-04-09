@@ -113,7 +113,12 @@ public enum Error {
 	/**
 	 * There isn't a token generated for this operation and user account
 	 */
-	E501(501, "There isn't a token generated for this operation and user account");
+	E501(501, "There isn't a token generated for this operation and user account"),
+	/*********************** E6xx codes refer to notification API problems ***********************/
+    /**
+     * Mozilla SimplePush: There's no information for this endpoint and version for this user.
+     */
+    E601(601, "Mozilla SimplePush: There's no information for this endpoint and version for this user.");
 
 	private final int code;
 	private String message;
