@@ -32,8 +32,8 @@ import com.google.gson.JsonElement;
 import com.ning.http.util.Base64;
 
 public class Latch {
-	private static final String API_VERSION = "0.6";
-    public static String API_HOST = "https://latch.elevenpaths.com";
+	protected static final String API_VERSION = "0.6";
+      public static String API_HOST = "https://latch.elevenpaths.com";
 	public static final String API_CHECK_STATUS_URL = "/api/"+API_VERSION+"/status";
 	public static final String API_PAIR_URL = "/api/"+API_VERSION+"/pair";
 	public static final String API_PAIR_WITH_ID_URL = "/api/"+API_VERSION+"/pairWithId";
@@ -118,7 +118,7 @@ public class Latch {
 		throw new RuntimeException("To use this method you need to specify how to perform an HTTP request. Extend this class and overload the HTTP_GET method.");
 	}
 
-	private LatchResponse HTTP_GET_proxy(String url) {
+	protected LatchResponse HTTP_GET_proxy(String url) {
 		return new LatchResponse(HTTP_GET(API_HOST + url, authenticationHeaders("GET", url, null)));
 	}
 	public LatchResponse pairWithId(String id) {
