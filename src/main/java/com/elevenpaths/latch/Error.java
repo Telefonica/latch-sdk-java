@@ -59,7 +59,10 @@ public enum Error {
 	 * Request expired, date is too old
 	 */
 	E109(109, "Request expired, date is too old"),
-
+    /**
+     * Unauthorized client
+     */
+    E110(110, "Unauthorized client"),
 
 	/*********************** E2xx codes refer to problems with user accounts ***********************/
 	/**
