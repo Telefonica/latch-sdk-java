@@ -34,6 +34,7 @@
 ```
      LatchResponse pairResponse = latch.pair(ACCOUNT_ID);
      LatchResponse statusResponse = latch.status(ACCOUNT_ID);
+     LatchResponse opStatusResponse = latch.operationStatus(ACCOUNT_ID, OPERATION_ID);
      LatchResponse unpairResponse = latch.unpair(ACCOUNT_ID);
 ```
 
