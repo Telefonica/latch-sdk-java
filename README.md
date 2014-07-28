@@ -32,7 +32,7 @@
 
 * Call to Latch Server. Pairing will return an account id that you should store for future api calls
 ```
-     LatchResponse pairResponse = latch.pair(ACCOUNT_ID);
+     LatchResponse pairResponse = latch.pair(TOKEN);
      LatchResponse statusResponse = latch.status(ACCOUNT_ID);
      LatchResponse opStatusResponse = latch.operationStatus(ACCOUNT_ID, OPERATION_ID);
      LatchResponse unpairResponse = latch.unpair(ACCOUNT_ID);
