@@ -121,7 +121,12 @@ public enum Error {
     /**
      * Mozilla SimplePush: There's no information for this endpoint and version for this user.
      */
-    E601(601, "Mozilla SimplePush: There's no information for this endpoint and version for this user.");
+    E601(601, "Mozilla SimplePush: There's no information for this endpoint and version for this user."),
+    /*********************** E7xx codes refer to subscription limit problems ***********************/
+    /**
+     * The account has been paired but has been marked as disabled.
+     */
+    E701(701, "The account has been paired but has been marked as disabled.");
 
 	private final int code;
 	private String message;
