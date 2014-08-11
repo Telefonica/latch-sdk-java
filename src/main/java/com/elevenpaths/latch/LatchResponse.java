@@ -54,7 +54,8 @@ public class LatchResponse {
 				this.data = json.getAsJsonObject().getAsJsonObject("data");
 			}
 			if (json.getAsJsonObject().has("error")) {
-				this.error = Error.fromCode(json.getAsJsonObject().getAsJsonObject("error").get("code").getAsString());
+				this.error = new Error(json.getAsJsonObject().getAsJsonObject("error").get("code").getAsInt(),
+				            json.getAsJsonObject().getAsJsonObject("error").get("message").getAsString());
 			}
 		}
 	}
