@@ -129,7 +129,7 @@ public class Latch {
     }
 
     public JsonElement HTTP_PUT(String URL, Map<String, String>headers, Map<String, String>data) {
-        throw new RuntimeException("To use this method you need to specify how to perform an HTTP request. Extend this class and overload the HTTP_DELETE method.");
+        throw new RuntimeException("To use this method you need to specify how to perform an HTTP request. Extend this class and overload the HTTP_PUT method.");
     }
 
     protected LatchResponse HTTP_GET_proxy(String url) {
