@@ -38,7 +38,9 @@ public class Latch {
     public static final String API_PAIR_URL = "/api/"+API_VERSION+"/pair";
     public static final String API_PAIR_WITH_ID_URL = "/api/"+API_VERSION+"/pairWithId";
     public static final String API_UNPAIR_URL = "/api/"+API_VERSION+"/unpair";
-
+    public static final String API_LOCK_URL = "/api/"+API_VERSION+"/lock";
+    public static final String API_UNLOCK_URL = "/api/"+API_VERSION+"/unlock";
+    public static final String API_HISTORY_URL = "/api/"+API_VERSION+"/history";
     public static final String API_OPERATION = "/api/"+API_VERSION+"/operation";
 
     public static final String X_11PATHS_HEADER_PREFIX = "X-11paths-";
@@ -167,6 +169,36 @@ public class Latch {
 
     public LatchResponse unpair(String id) {
         return HTTP_GET_proxy(new StringBuilder(API_UNPAIR_URL).append("/").append(id).toString());
+    }
+
+    public LatchResponse lock(String accountId) {
+        return HTTP_GET_proxy(new StringBuilder(API_LOCK_URL).append("/").append(accountId).toString());
+    }
+
+    public LatchResponse lock(String accountId, String operationId) {
+        return HTTP_GET_proxy(new StringBuilder(API_LOCK_URL).append("/").append(accountId).append("/op/").append(operationId).toString());
+    }
+
+    public LatchResponse unlock(String accountId) {
+        return HTTP_GET_proxy(new StringBuilder(API_UNLOCK_URL).append("/").append(accountId).toString());
+    }
+
+    public LatchResponse unlock(String accountId, String operationId) {
+        return HTTP_GET_proxy(new StringBuilder(API_UNLOCK_URL).append("/").append(accountId).append("/op/").append(operationId).toString());
+    }
+
+    public LatchResponse history(String accountId) {
+        return HTTP_GET_proxy(new StringBuilder(API_HISTORY_URL).append("/").append(accountId).toString());
+    }
+
+    public LatchResponse history(String accountId, Long from, Long to) {
+        return HTTP_GET_proxy(new StringBuilder(API_HISTORY_URL).append("/").append(accountId)
+                                                                .append("/").append(from != null ? String.valueOf(from) :"0")
+                                                                .append("/").append(to != null ? String.valueOf(to) : String.valueOf(new Date().getTime())).toString());
+    }
+
+    public LatchResponse history(String accountId, String operationId) {
+        return HTTP_GET_proxy(new StringBuilder(API_HISTORY_URL).append("/").append(accountId).append("/op/").append(operationId).toString());
     }
 
     public LatchResponse createOperation(String parentId, String name, String twoFactor, String lockOnRequest) {
