@@ -18,9 +18,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA*/
 
 package com.elevenpaths.latch;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.TreeMap;
@@ -29,6 +38,7 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.ning.http.util.Base64;
 
 public class Latch {
@@ -118,36 +128,36 @@ public class Latch {
         this.secretKey = secretKey;
     }
 
-    public JsonElement HTTP_GET(String URL, Map<String, String>headers) {
-        throw new RuntimeException("To use this method you need to specify how to perform an HTTP request. Extend this class and overload the HTTP_GET method.");
+    public JsonElement HTTP_GET(String URL, Map<String, String> headers) {
+        return HTTP(URL, "GET", headers, null);
     }
 
-    public JsonElement HTTP_POST(String URL, Map<String, String>headers, Map<String, String>data) {
-        throw new RuntimeException("To use this method you need to specify how to perform an HTTP request. Extend this class and overload the HTTP_POST method.");
+    public JsonElement HTTP_POST(String URL, Map<String, String> headers, Map<String, String> data) {
+        return HTTP(URL, "POST", headers, data);
     }
 
-    public JsonElement HTTP_DELETE(String URL, Map<String, String>headers, Map<String, String>data) {
-        throw new RuntimeException("To use this method you need to specify how to perform an HTTP request. Extend this class and overload the HTTP_DELETE method.");
+    public JsonElement HTTP_DELETE(String URL, Map<String, String> headers) {
+        return HTTP(URL, "DELETE", headers, null);
     }
 
-    public JsonElement HTTP_PUT(String URL, Map<String, String>headers, Map<String, String>data) {
-        throw new RuntimeException("To use this method you need to specify how to perform an HTTP request. Extend this class and overload the HTTP_PUT method.");
+    public JsonElement HTTP_PUT(String URL, Map<String, String> headers, Map<String, String> data) {
+        return HTTP(URL, "PUT", headers, data);
     }
 
     protected LatchResponse HTTP_GET_proxy(String url) {
         return new LatchResponse(HTTP_GET(API_HOST + url, authenticationHeaders("GET", url, null)));
     }
 
-    protected LatchResponse HTTP_POST_proxy(String url, Map<String, String>data) {
+    protected LatchResponse HTTP_POST_proxy(String url, Map<String, String> data) {
         return new LatchResponse(HTTP_POST(API_HOST + url, authenticationHeaders("POST", url, null), data));
     }
 
-    protected LatchResponse HTTP_PUT_proxy(String url, Map<String, String>data) {
+    protected LatchResponse HTTP_PUT_proxy(String url, Map<String, String> data) {
         return new LatchResponse(HTTP_PUT(API_HOST + url, authenticationHeaders("PUT", url, null), data));
     }
 
-    protected LatchResponse HTTP_DELETE_proxy(String url, Map<String, String>data) {
-        return new LatchResponse(HTTP_DELETE(API_HOST + url, authenticationHeaders("DELETE", url, null), data));
+    protected LatchResponse HTTP_DELETE_proxy(String url) {
+        return new LatchResponse(HTTP_DELETE(API_HOST + url, authenticationHeaders("DELETE", url, null)));
     }
 
     public LatchResponse pairWithId(String id) {
@@ -202,7 +212,7 @@ public class Latch {
     }
 
     public LatchResponse createOperation(String parentId, String name, String twoFactor, String lockOnRequest) {
-        Map<String, String>data = new HashMap<String, String>();
+        Map<String, String> data = new HashMap<String, String>();
         data.put("parentId", parentId);
         data.put("name", name);
         data.put("two_factor", twoFactor);
@@ -211,20 +221,16 @@ public class Latch {
     }
 
     public LatchResponse removeOperation(String operationId) {
-        Map<String, String>data = new HashMap<String, String>();
-        data.put("operationId", operationId);
-        return HTTP_DELETE_proxy(new StringBuilder(API_OPERATION).toString(), data);
+        return HTTP_DELETE_proxy(new StringBuilder(API_OPERATION).append("/").append(operationId).toString());
     }
 
     public LatchResponse updateOperation(String operationId, String name, String twoFactor, String lockOnRequest) {
-        Map<String, String>data = new HashMap<String, String>();
-        data.put("operationId", operationId);
+        Map<String, String> data = new HashMap<String, String>();
         data.put("name", name);
         data.put("two_factor", twoFactor);
         data.put("lock_on_request", lockOnRequest);
-        return HTTP_POST_proxy(new StringBuilder(API_OPERATION).toString(), data);
+        return HTTP_POST_proxy(new StringBuilder(API_OPERATION).append("/").append(operationId).toString(), data);
     }
-
 
     /**
      *
@@ -325,4 +331,104 @@ public class Latch {
         return sdf.format(new Date());
 
     }
+    
+    /**
+     * Makes an HTTP request
+     * @param URL The request URL.
+     * @param method The request method.
+     * @param headers Headers to add to the HTTP request.
+     * @param data Parameters to add to the HTTP request body.
+     * @return The server's JSON response or null if something has gone wrong.
+     */
+    private JsonElement HTTP(String URL, String method, Map<String, String> headers, Map<String, String> data) {
+
+        JsonElement rv = null;
+        InputStream is = null;
+        OutputStream os = null;
+        InputStreamReader isr = null;
+
+        try {
+
+            URL theURL = new URL(URL);
+            HttpURLConnection theConnection = (HttpURLConnection) theURL.openConnection();
+
+            theConnection.setRequestMethod(method);
+
+            if (headers != null && !headers.isEmpty()) {
+                Iterator<String> iterator = headers.keySet().iterator();
+                while (iterator.hasNext()) {
+                    String headerName = iterator.next();
+                    theConnection.setRequestProperty(headerName, headers.get(headerName));
+                }
+            }
+
+            if (!("GET".equals(method) || "DELETE".equals(method))) {
+                StringBuilder sb = new StringBuilder();
+                if (data != null && !data.isEmpty()) {
+                    String[] paramNames = new String[data.size()];
+                    data.keySet().toArray(paramNames);
+                    for (int i = 0; i < paramNames.length; i++) {
+                        sb.append(URLEncoder.encode(paramNames[i], "UTF-8"));
+                        sb.append("=");
+                        sb.append(URLEncoder.encode(data.get(paramNames[i]), "UTF-8"));
+                        if (i < paramNames.length - 1) {
+                            sb.append("&");
+                        }
+                    }
+                }
+                byte[] body = sb.toString().getBytes("US-ASCII");
+                theConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                theConnection.setRequestProperty("Content-Length", String.valueOf(body.length));
+                theConnection.setDoOutput(true);
+                os = theConnection.getOutputStream();
+                os.write(body);
+                os.flush();
+            }
+
+            JsonParser parser = new JsonParser();
+            is = theConnection.getInputStream();
+            isr = new InputStreamReader(is);
+            rv = parser.parse(isr);
+
+        } catch (MalformedURLException e) {
+            System.err.println("The URL is malformed (" + URL + ")");
+            e.printStackTrace();
+        } catch (IOException e) {
+            System.err.println("An exception has been thrown when communicating with Latch backend");
+            e.printStackTrace();
+        } finally {
+
+            if (os != null) {
+                try {
+                    os.close();
+                } catch (IOException e) {
+                    System.err.println("An exception has been thrown when trying to close the output stream");
+                    e.printStackTrace();
+                }
+            }
+
+            if (isr != null) {
+                try {
+                    isr.close();
+                } catch (IOException e) {
+                    System.err.println("An exception has been thrown when trying to close the input stream reader");
+                    e.printStackTrace();
+                }
+            }
+
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    System.err.println("An exception has been thrown when trying to close the input stream");
+                    e.printStackTrace();
+                }
+            }
+
+        }
+
+        return rv;
+
+    }
+    
 }
