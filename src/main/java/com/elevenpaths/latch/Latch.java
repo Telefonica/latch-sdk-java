@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -65,6 +66,10 @@ public class Latch {
 
     private static final String HMAC_ALGORITHM = "HmacSHA1";
 
+    private static final String CHARSET_ISO_8859_1 = "ISO-8859-1";
+    private static final String CHARSET_UTF_8 = "UTF-8";
+    private static final String PARAM_SEPARATOR = "&";
+    private static final String PARAM_VALUE_SEPARATOR = "=";
 
     public static void setHost(String host) {
         API_HOST = host;
@@ -145,19 +150,35 @@ public class Latch {
     }
 
     protected LatchResponse HTTP_GET_proxy(String url) {
-        return new LatchResponse(HTTP_GET(API_HOST + url, authenticationHeaders("GET", url, null)));
+        try {
+            return new LatchResponse(HTTP_GET(API_HOST + url, authenticationHeaders("GET", url, null, null)));
+        } catch (UnsupportedEncodingException e) {
+            return null;
+        }
     }
 
     protected LatchResponse HTTP_POST_proxy(String url, Map<String, String> data) {
-        return new LatchResponse(HTTP_POST(API_HOST + url, authenticationHeaders("POST", url, null), data));
-    }
-
-    protected LatchResponse HTTP_PUT_proxy(String url, Map<String, String> data) {
-        return new LatchResponse(HTTP_PUT(API_HOST + url, authenticationHeaders("PUT", url, null), data));
+        try {
+            return new LatchResponse(HTTP_POST(API_HOST + url, authenticationHeaders("POST", url, null, data), data));
+        } catch (UnsupportedEncodingException e) {
+            return null;
+        }
     }
 
     protected LatchResponse HTTP_DELETE_proxy(String url) {
-        return new LatchResponse(HTTP_DELETE(API_HOST + url, authenticationHeaders("DELETE", url, null)));
+        try {
+            return new LatchResponse(HTTP_DELETE(API_HOST + url, authenticationHeaders("DELETE", url, null, null)));
+        } catch (UnsupportedEncodingException e) {
+            return null;
+        }
+    }
+
+    protected LatchResponse HTTP_PUT_proxy(String url, Map<String, String> data) {
+        try {
+            return new LatchResponse(HTTP_PUT(API_HOST + url, authenticationHeaders("PUT", url, null, data), data));
+        } catch (UnsupportedEncodingException e) {
+            return null;
+        }
     }
 
     public LatchResponse pairWithId(String id) {
@@ -242,23 +263,34 @@ public class Latch {
             SecretKeySpec keySpec = new SecretKeySpec(secretKey.getBytes(), HMAC_ALGORITHM);
             Mac mac = Mac.getInstance(HMAC_ALGORITHM);
             mac.init(keySpec);
-            return Base64.encode(mac.doFinal(data.getBytes()));
+            return Base64.encode(mac.doFinal(data.getBytes(CHARSET_ISO_8859_1))); // data is ASCII except HTTP header values which can be ISO_8859_1
         } catch (Exception e) {
             return null;
         }
     }
 
-
     /**
-     * Calculate the authentication headers to be sent with a request to the API
-     * @param HTTPMethod the HTTP Method, currently only GET is supported
-     * @param queryString the urlencoded string including the path (from the first forward slash) and the parameters
-     * @param xHeaders HTTP headers specific to the 11-paths API, excluding X-11Paths-Date. null if not needed.
-     * @return a map with the Authorization and X-11Paths-Date headers needed to sign a Latch API request
+     * Calculates the headers to be sent with a request to the API so the server
+     * can verify the signature
+     * <p>
+     * Calls {@link #authenticationHeaders(String, String, Map, Map, String)}
+     * with the current date as {@code utc}.
+     * @param method The HTTP request method.
+     * @param querystring The urlencoded string including the path (from the
+     *        first forward slash) and the parameters.
+     * @param xHeaders The HTTP request headers specific to the API, excluding
+     *        X-11Paths-Date. null if not needed.
+     * @param params The HTTP request params. Must be only those to be sent in
+     *        the body of the request and must be urldecoded. null if not
+     *        needed.
+     * @return A map with the {@value AUTHORIZATION_HEADER_NAME} and {@value
+     *         DATE_HEADER_NAME} headers needed to be sent with a request to the
+     *         API.
+     * @throws UnsupportedEncodingException If {@value CHARSET_UTF_8} charset is
+     *         not supported.
      */
-    public final Map<String, String> authenticationHeaders(String HTTPMethod, String queryString, Map<String,String>xHeaders) {
-        String currentUTC=getCurrentUTC();
-        return authenticationHeaders(HTTPMethod, queryString, xHeaders, currentUTC);
+    public final Map<String, String> authenticationHeaders(String method, String querystring, Map<String, String> xHeaders, Map<String, String> params) throws UnsupportedEncodingException {
+        return authenticationHeaders(method, querystring, xHeaders, params, getCurrentUTC());
     }
 
     /**
@@ -271,7 +303,7 @@ public class Latch {
      * @return a map with the Authorization and X-11Paths-Date headers needed to sign a Latch API request
      */
     //TODO: nonce
-    public final Map<String, String> authenticationHeaders(String HTTPMethod, String queryString, Map<String,String>xHeaders, String utc) {
+    public final Map<String, String> authenticationHeaders(String HTTPMethod, String queryString, Map<String,String>xHeaders, Map<String, String> params, String utc) throws UnsupportedEncodingException {
         StringBuilder stringToSign = new StringBuilder();
         stringToSign.append(HTTPMethod.toUpperCase().trim());
         stringToSign.append("\n");
@@ -280,7 +312,13 @@ public class Latch {
         stringToSign.append(getSerializedHeaders(xHeaders));
         stringToSign.append("\n");
         stringToSign.append(queryString.trim());
-
+        if (params != null && !params.isEmpty()) {
+            String serializedParams = getSerializedParams(params);
+            if (serializedParams != null && !serializedParams.isEmpty()) {
+                stringToSign.append("\n");
+                stringToSign.append(serializedParams);
+            }
+        }
         String signedData = signData(stringToSign.toString());
         String authorizationHeader = new StringBuilder(AUTHORIZATION_METHOD)
             .append(AUTHORIZATION_HEADER_FIELD_SEPARATOR)
@@ -321,6 +359,44 @@ public class Latch {
         }
     }
 
+    /**
+     * Prepares and returns a string ready to be signed from the params of an
+     * HTTP request
+     * <p>
+     * The params must be only those included in the body of the HTTP request
+     * when its content type is application/x-www-urlencoded and must be
+     * urldecoded.
+     * @param params The params of an HTTP request.
+     * @return A serialized representation of the params ready to be signed.
+     *         null if there are no valid params.
+     * @throws UnsupportedEncodingException If {@value CHARSET_UTF_8} charset is
+     *         not supported.
+     */
+    private String getSerializedParams(Map<String, String> params) throws UnsupportedEncodingException {
+        String rv = null;
+        if (params != null && !params.isEmpty()) {
+            TreeMap<String, String> sortedParams = new TreeMap<String, String>();
+            for (String key : params.keySet()) {
+                if (key != null && params.get(key) != null) {
+                    sortedParams.put(key, params.get(key));
+                }
+            }
+            StringBuilder serializedParams = new StringBuilder();
+            for (String key : sortedParams.keySet()) {
+                serializedParams.append(URLEncoder.encode(key, CHARSET_UTF_8));
+                serializedParams.append(PARAM_VALUE_SEPARATOR);
+                serializedParams.append(URLEncoder.encode(sortedParams.get(key), CHARSET_UTF_8));
+                if (!key.equals(sortedParams.lastKey())) {
+                    serializedParams.append(PARAM_SEPARATOR);
+                }
+            }
+            if (serializedParams.length() > 0) {
+                rv = serializedParams.toString();
+            }
+        }
+        return rv;
+    }
+    
     /**
      *
      * @return a string representation of the current time in UTC to be used in a Date HTTP Header
