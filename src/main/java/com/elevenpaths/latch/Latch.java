@@ -228,10 +228,6 @@ public class Latch {
                                                                 .append("/").append(to != null ? String.valueOf(to) : String.valueOf(new Date().getTime())).toString());
     }
 
-    public LatchResponse history(String accountId, String operationId) {
-        return HTTP_GET_proxy(new StringBuilder(API_HISTORY_URL).append("/").append(accountId).append("/op/").append(operationId).toString());
-    }
-
     public LatchResponse createOperation(String parentId, String name, String twoFactor, String lockOnRequest) {
         Map<String, String> data = new HashMap<String, String>();
         data.put("parentId", parentId);
