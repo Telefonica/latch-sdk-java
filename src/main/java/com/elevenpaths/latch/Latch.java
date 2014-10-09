@@ -52,7 +52,7 @@ public class Latch {
     public static final String API_LOCK_URL = "/api/"+API_VERSION+"/lock";
     public static final String API_UNLOCK_URL = "/api/"+API_VERSION+"/unlock";
     public static final String API_HISTORY_URL = "/api/"+API_VERSION+"/history";
-    public static final String API_OPERATION = "/api/"+API_VERSION+"/operation";
+    public static final String API_OPERATION_URL = "/api/"+API_VERSION+"/operation";
 
     public static final String X_11PATHS_HEADER_PREFIX = "X-11paths-";
     private static final String X_11PATHS_HEADER_SEPARATOR = ":";
@@ -66,8 +66,14 @@ public class Latch {
 
     private static final String HMAC_ALGORITHM = "HmacSHA1";
 
+    private static final String CHARSET_ASCII = "US-ASCII";
     private static final String CHARSET_ISO_8859_1 = "ISO-8859-1";
     private static final String CHARSET_UTF_8 = "UTF-8";
+    private static final String HTTP_METHOD_GET = "GET";
+    private static final String HTTP_METHOD_DELETE = "DELETE";
+    private static final String HTTP_HEADER_CONTENT_LENGTH  = "Content-Length";
+    private static final String HTTP_HEADER_CONTENT_TYPE  = "Content-Type";
+    private static final String HTTP_HEADER_CONTENT_TYPE_FORM_URLENCODED  = "application/x-www-form-urlencoded";
     private static final String PARAM_SEPARATOR = "&";
     private static final String PARAM_VALUE_SEPARATOR = "=";
 
@@ -234,11 +240,11 @@ public class Latch {
         data.put("name", name);
         data.put("two_factor", twoFactor);
         data.put("lock_on_request", lockOnRequest);
-        return HTTP_PUT_proxy(new StringBuilder(API_OPERATION).toString(), data);
+        return HTTP_PUT_proxy(new StringBuilder(API_OPERATION_URL).toString(), data);
     }
 
     public LatchResponse removeOperation(String operationId) {
-        return HTTP_DELETE_proxy(new StringBuilder(API_OPERATION).append("/").append(operationId).toString());
+        return HTTP_DELETE_proxy(new StringBuilder(API_OPERATION_URL).append("/").append(operationId).toString());
     }
 
     public LatchResponse updateOperation(String operationId, String name, String twoFactor, String lockOnRequest) {
@@ -246,7 +252,7 @@ public class Latch {
         data.put("name", name);
         data.put("two_factor", twoFactor);
         data.put("lock_on_request", lockOnRequest);
-        return HTTP_POST_proxy(new StringBuilder(API_OPERATION).append("/").append(operationId).toString(), data);
+        return HTTP_POST_proxy(new StringBuilder(API_OPERATION_URL).append("/").append(operationId).toString(), data);
     }
 
     /**
@@ -434,23 +440,23 @@ public class Latch {
                 }
             }
 
-            if (!("GET".equals(method) || "DELETE".equals(method))) {
+            if (!(HTTP_METHOD_GET.equals(method) || HTTP_METHOD_DELETE.equals(method))) {
                 StringBuilder sb = new StringBuilder();
                 if (data != null && !data.isEmpty()) {
                     String[] paramNames = new String[data.size()];
                     data.keySet().toArray(paramNames);
                     for (int i = 0; i < paramNames.length; i++) {
-                        sb.append(URLEncoder.encode(paramNames[i], "UTF-8"));
-                        sb.append("=");
-                        sb.append(URLEncoder.encode(data.get(paramNames[i]), "UTF-8"));
+                        sb.append(URLEncoder.encode(paramNames[i], CHARSET_UTF_8));
+                        sb.append(Latch.PARAM_VALUE_SEPARATOR);
+                        sb.append(URLEncoder.encode(data.get(paramNames[i]), CHARSET_UTF_8));
                         if (i < paramNames.length - 1) {
-                            sb.append("&");
+                            sb.append(PARAM_SEPARATOR);
                         }
                     }
                 }
-                byte[] body = sb.toString().getBytes("US-ASCII");
-                theConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-                theConnection.setRequestProperty("Content-Length", String.valueOf(body.length));
+                byte[] body = sb.toString().getBytes(CHARSET_ASCII);
+                theConnection.setRequestProperty(HTTP_HEADER_CONTENT_TYPE, HTTP_HEADER_CONTENT_TYPE_FORM_URLENCODED);
+                theConnection.setRequestProperty(HTTP_HEADER_CONTENT_LENGTH, String.valueOf(body.length));
                 theConnection.setDoOutput(true);
                 os = theConnection.getOutputStream();
                 os.write(body);
@@ -459,7 +465,7 @@ public class Latch {
 
             JsonParser parser = new JsonParser();
             is = theConnection.getInputStream();
-            isr = new InputStreamReader(is);
+            isr = new InputStreamReader(is, CHARSET_UTF_8);
             rv = parser.parse(isr);
 
         } catch (MalformedURLException e) {
