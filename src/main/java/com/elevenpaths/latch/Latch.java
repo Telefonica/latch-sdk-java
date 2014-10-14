@@ -163,6 +163,10 @@ public class Latch {
         }
     }
 
+    protected LatchResponse HTTP_POST_proxy(String url){
+        return HTTP_POST_proxy(url, new HashMap<String, String>());
+    }
+
     protected LatchResponse HTTP_POST_proxy(String url, Map<String, String> data) {
         try {
             return new LatchResponse(HTTP_POST(API_HOST + url, authenticationHeaders("POST", url, null, data), data));
@@ -209,19 +213,19 @@ public class Latch {
     }
 
     public LatchResponse lock(String accountId) {
-        return HTTP_GET_proxy(new StringBuilder(API_LOCK_URL).append("/").append(accountId).toString());
+        return HTTP_POST_proxy(new StringBuilder(API_LOCK_URL).append("/").append(accountId).toString());
     }
 
     public LatchResponse lock(String accountId, String operationId) {
-        return HTTP_GET_proxy(new StringBuilder(API_LOCK_URL).append("/").append(accountId).append("/op/").append(operationId).toString());
+        return HTTP_POST_proxy(new StringBuilder(API_LOCK_URL).append("/").append(accountId).append("/op/").append(operationId).toString());
     }
 
     public LatchResponse unlock(String accountId) {
-        return HTTP_GET_proxy(new StringBuilder(API_UNLOCK_URL).append("/").append(accountId).toString());
+        return HTTP_POST_proxy(new StringBuilder(API_UNLOCK_URL).append("/").append(accountId).toString());
     }
 
     public LatchResponse unlock(String accountId, String operationId) {
-        return HTTP_GET_proxy(new StringBuilder(API_UNLOCK_URL).append("/").append(accountId).append("/op/").append(operationId).toString());
+        return HTTP_POST_proxy(new StringBuilder(API_UNLOCK_URL).append("/").append(accountId).append("/op/").append(operationId).toString());
     }
 
     public LatchResponse history(String accountId) {
@@ -245,6 +249,10 @@ public class Latch {
 
     public LatchResponse removeOperation(String operationId) {
         return HTTP_DELETE_proxy(new StringBuilder(API_OPERATION_URL).append("/").append(operationId).toString());
+    }
+
+    public LatchResponse getOperations() {
+        return HTTP_GET_proxy(new StringBuilder(API_OPERATION_URL).toString());
     }
 
     public LatchResponse updateOperation(String operationId, String name, String twoFactor, String lockOnRequest) {
