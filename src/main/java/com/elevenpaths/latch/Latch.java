@@ -255,6 +255,10 @@ public class Latch {
         return HTTP_GET_proxy(new StringBuilder(API_OPERATION_URL).toString());
     }
 
+    public LatchResponse getOperations(String operationId) {
+        return HTTP_GET_proxy(new StringBuilder(API_OPERATION_URL).append("/").append(operationId).toString());
+    }
+
     public LatchResponse updateOperation(String operationId, String name, String twoFactor, String lockOnRequest) {
         Map<String, String> data = new HashMap<String, String>();
         data.put("name", name);
