@@ -22,35 +22,35 @@ import com.google.gson.JsonObject;
 
 public class Error {
 
-	private int code;
-	private String message;
+    private int code;
+    private String message;
 
-	public Error(int code, String msg) {
-		this.code = code;
-		this.message = msg;
-	}
+    public Error(int code, String msg) {
+        this.code = code;
+        this.message = msg;
+    }
 
-	public int getCode() {
-		return code;
-	}
+    public int getCode() {
+        return code;
+    }
 
-	public String getMessage() {
-		return message;
-	}
+    public String getMessage() {
+        return message;
+    }
 
-	/**
-	 *
-	 * @return a JsonObject with the code and message of the error
-	 */
-	public JsonObject toJson() {
-		JsonObject error = new JsonObject();
-		error.addProperty("code", code);
-		error.addProperty("message", message);
-		return error;
-	}
+    /**
+     *
+     * @return a JsonObject with the code and message of the error
+     */
+    public JsonObject toJson() {
+        JsonObject error = new JsonObject();
+        error.addProperty("code", code);
+        error.addProperty("message", message);
+        return error;
+    }
 
-	@Override
-	public String toString() {
-		return toJson().toString();
-	}
+    @Override
+    public String toString() {
+        return toJson().toString();
+    }
 }
