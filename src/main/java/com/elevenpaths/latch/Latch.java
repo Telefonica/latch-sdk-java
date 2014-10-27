@@ -103,6 +103,14 @@ public class Latch {
 
 	private String appId;
 	private String secretKey;
+	
+	public void setAppId(String appId){
+		this.appId=appId;
+	}
+	
+	public void setSecretKey(String secretKey){
+		this.secretKey=secretKey;
+	}
 
 	/**
 	 * Create an instance of the class with the Application ID and secret obtained from Eleven Paths
