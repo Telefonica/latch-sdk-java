@@ -14,20 +14,9 @@
 
 * Include all SDK files and dependencies in your project.
 
-* Create a new class (for example LatchSDK.java) extending Latch.java. This class should override HTTP_GET method with your own implementation to perform HTTP requests as you usually perform them in your project.
-```
-     public class LatchSDK extends Latch{
-
-          @Override
-          public JsonElement HTTP_GET(String URL, Map<String, String>headers) {
-               //Your implementation here
-          }
-     }
-```
-
 * Create a Latch object with the "Application ID" and "Secret" previously obtained.
 ```
-     LatchSDK latch = new LatchSDK(APP_ID, SECRET);
+     Latch latch = new Latch(APP_ID, SECRET);
 ```
 
 * Call to Latch Server. Pairing will return an account id that you should store for future api calls
