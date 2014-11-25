@@ -36,8 +36,8 @@
 
 #### TROUBLESHOOTING ####
 
-* A javax.net.ssl.SSLHandshakeException with a nested sun.security.validator.ValidatorException is thrown when invoking an API call.
+**A javax.net.ssl.SSLHandshakeException with a nested sun.security.validator.ValidatorException is thrown when invoking an API call**
 
->> This exception is normally thrown when the JDK doesn't trust the CA that signs the digital certificate used in https://latch.elevenpaths.com
+This exception is normally thrown when the JDK doesn't trust the CA that signs the digital certificate used in https://latch.elevenpaths.com
 
->> You may need to install the CA (http://www.startssl.com/certs/ca.pem) as a trusted certificate in your JDK's truststore (normally in jre/lib/security/cacerts) using the keytool utility.
+You may need to install the CA (http://www.startssl.com/certs/ca.pem) as a trusted certificate in your JDK's truststore (normally in jre/lib/security/cacerts) using the keytool utility.
