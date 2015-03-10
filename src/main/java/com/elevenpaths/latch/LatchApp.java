@@ -44,12 +44,34 @@ public class LatchApp extends LatchAuth {
         return HTTP_GET_proxy(new StringBuilder(API_PAIR_URL).append("/").append(token).toString());
     }
 
-    public LatchResponse status(String accountId) {
+    public LatchResponse status(String accountId, boolean silent, boolean nootp) {
+        if (silent && nootp) {
+            return HTTP_GET_proxy(new StringBuilder(API_CHECK_STATUS_URL).append("/").append(accountId).append("/nootp/silent").toString());
+        }
+        if (silent) {
+            return HTTP_GET_proxy(new StringBuilder(API_CHECK_STATUS_URL).append("/").append(accountId).append("/silent").toString());
+        }
+        if (nootp) {
+            return HTTP_GET_proxy(new StringBuilder(API_CHECK_STATUS_URL).append("/").append(accountId).append("/nootp").toString());
+        }
         return HTTP_GET_proxy(new StringBuilder(API_CHECK_STATUS_URL).append("/").append(accountId).toString());
     }
 
+    public LatchResponse status(String accountId) {
+        return status(accountId, false, false);
+    }
+
+    public LatchResponse operationStatus(String accountId, String operationId, boolean silentAndNootp) {
+        if (silentAndNootp) {
+            return HTTP_GET_proxy(new StringBuilder(API_CHECK_STATUS_URL).append("/").append(accountId).append("/op/").append(operationId).append("nootp/silent").toString());
+        } else {
+            return HTTP_GET_proxy(new StringBuilder(API_CHECK_STATUS_URL).append("/").append(accountId).append("/op/").append(operationId).toString());
+        }
+
+    }
+
     public LatchResponse operationStatus(String accountId, String operationId) {
-        return HTTP_GET_proxy(new StringBuilder(API_CHECK_STATUS_URL).append("/").append(accountId).append("/op/").append(operationId).toString());
+        return operationStatus(accountId, operationId, false);
     }
 
     public LatchResponse unpair(String id) {
