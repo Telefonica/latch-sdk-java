@@ -44,34 +44,120 @@ public class LatchApp extends LatchAuth {
         return HTTP_GET_proxy(new StringBuilder(API_PAIR_URL).append("/").append(token).toString());
     }
 
-    public LatchResponse status(String accountId, boolean silent, boolean nootp) {
-        StringBuilder url = new StringBuilder(API_CHECK_STATUS_URL).append("/").append(accountId);
-        if (nootp) {
-            url.append("/nootp");
-        }
-        if (silent) {
-            url.append("/silent");
-        }
-        return HTTP_GET_proxy(url.toString());
-    }
-
+    /**
+     * Return application status for a given accountId
+     * @param accountId The accountId which status is going to be retrieved
+     * @return LatchResponse containing the status
+     */
     public LatchResponse status(String accountId) {
-        return status(accountId, false, false);
+        return status(accountId, null, false, false);
     }
 
-    public LatchResponse operationStatus(String accountId, String operationId, boolean silent, boolean nootp) {
-        StringBuilder url = new StringBuilder(API_CHECK_STATUS_URL).append("/").append(accountId).append("/op/").append(operationId);
-        if (nootp) {
+    /**
+     * Return application status for a given accountId
+     * @param accountId The accountId which status is going to be retrieved
+     * @param silent True for not sending lock/unlock push notifications to the mobile devices, false otherwise.
+     * @param noOtp True for not generating a OTP if needed.
+     * @return LatchResponse containing the status
+     */
+    public LatchResponse status(String accountId, boolean silent, boolean noOtp) {
+        return status(accountId, null, silent, noOtp);
+    }
+
+    /**
+     * Return operation status for a given accountId and operationId
+     * @param accountId The accountId which status is going to be retrieved
+     * @param operationId The operationId which status is going to be retrieved
+     * @return LatchResponse containing the status
+     */
+    public LatchResponse status(String accountId, String operationId) {
+        return status(accountId, operationId, false, false);
+    }
+
+    /**
+     * Return operation status for a given accountId and operationId
+     * @param accountId The accountId which status is going to be retrieved
+     * @param operationId The operationId which status is going to be retrieved
+     * @param silent True for not sending lock/unlock push notifications to the mobile devices, false otherwise.
+     * @param noOtp True for not generating a OTP if needed.
+     * @return LatchResponse containing the status
+     */
+    public LatchResponse status(String accountId, String operationId, boolean silent, boolean noOtp){
+        StringBuilder url = new StringBuilder(API_CHECK_STATUS_URL).append("/").append(accountId);
+        if (operationId != null && !operationId.isEmpty()){
+            url.append("/op/").append(operationId);
+        }
+
+        if (noOtp) {
             url.append("/nootp");
         }
         if (silent) {
             url.append("/silent");
         }
+
         return HTTP_GET_proxy(url.toString());
     }
 
+    /**
+     * Return application status for a given accountId while sending some custom data (Like OTP token or a message)
+     * @param accountId The accountId which status is going to be retrieved
+     * @param otpToken This will be the OTP sent to the user instead of generating a new one
+     * @param otpMessage To attach a custom message with the OTP to the user
+     * @return LatchResponse containing the status
+     */
+    public LatchResponse status(String accountId, String otpToken, String otpMessage){
+        return status(accountId, null, false, otpToken, otpMessage);
+    }
+
+    /**
+     * Return application status for a given accountId while sending some custom data (Like OTP token or a message)
+     * @param accountId The accountId which status is going to be retrieved
+     * @param silent True for not sending lock/unlock push notifications to the mobile devices, false otherwise.
+     * @param otpToken This will be the OTP sent to the user instead of generating a new one
+     * @param otpMessage To attach a custom message with the OTP to the user
+     * @return LatchResponse containing the status
+     */
+    public LatchResponse status(String accountId, boolean silent, String otpToken, String otpMessage){
+        return status(accountId, null, silent, otpToken, otpMessage);
+    }
+
+    /**
+     * Return operation status for a given accountId and operation while sending some custom data (Like OTP token or a message)
+     * @param accountId The accountId which status is going to be retrieved
+     * @param operationId The operationId which status is going to be retrieved
+     * @param silent True for not sending lock/unlock push notifications to the mobile devices, false otherwise.
+     * @param otpToken This will be the OTP sent to the user instead of generating a new one
+     * @param otpMessage To attach a custom message with the OTP to the user
+     * @return LatchResponse containing the status
+     */
+    public LatchResponse status(String accountId, String operationId, boolean silent, String otpToken, String otpMessage){
+        StringBuilder url = new StringBuilder(API_CHECK_STATUS_URL).append("/").append(accountId);
+        if (operationId != null && !operationId.isEmpty()){
+            url.append("/op/").append(operationId);
+        }
+
+        if (silent) {
+            url.append("/silent");
+        }
+
+        Map<String, String> data = new HashMap<String, String>();
+        if (otpToken != null && !otpToken.isEmpty()) {
+            data.put("otp", otpToken);
+        }
+        if (otpMessage != null && !otpMessage.isEmpty()) {
+            data.put("msg", otpMessage);
+        }
+        return HTTP_POST_proxy(url.toString(), data);
+    }
+
+    @Deprecated
     public LatchResponse operationStatus(String accountId, String operationId) {
-        return operationStatus(accountId, operationId, false, false);
+        return status(accountId, operationId, false, false);
+    }
+
+    @Deprecated
+    public LatchResponse operationStatus(String accountId, String operationId, boolean silent, boolean noOtp) {
+        return status(accountId, operationId, silent, noOtp);
     }
 
     public LatchResponse unpair(String id) {
