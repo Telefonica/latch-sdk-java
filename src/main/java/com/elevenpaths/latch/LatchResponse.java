@@ -49,7 +49,7 @@ public class LatchResponse {
      * @throws NullPointerException when the json element is null, preventing the instantiation of the object
      */
     public LatchResponse(JsonElement json) {
-        if (json.isJsonObject()) {
+        if (json != null && json.isJsonObject()) {
             if (json.getAsJsonObject().has("data")) {
                 this.data = json.getAsJsonObject().getAsJsonObject("data");
             }
