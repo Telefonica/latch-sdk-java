@@ -14,19 +14,12 @@ Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA*/
-package com.elevenpaths.latch;
+package com.elevenpaths.latch.response;
 
-import com.elevenpaths.api.APIResponse;
-import com.elevenpaths.api.JsonResponse;
-
-@Deprecated
-public class LatchResponse<T extends JsonResponse> extends APIResponse<T> {
-
-    @Deprecated
-    protected LatchResponse(APIResponse<T> apiResponse) {
-        this.setData(apiResponse.getData());
-        this.setError(apiResponse.getError());
-        this.setClazz(apiResponse.getClazz());
-        this.setDataObject(apiResponse.getDataObject());
-    }
+public enum LockOnRequestStatus {
+    DISABLED,
+    ON,
+    OFF,
+    OPT_IN,
+    MANDATORY
 }

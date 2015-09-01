@@ -14,19 +14,37 @@ Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA*/
-package com.elevenpaths.latch;
+package com.elevenpaths.latch.response;
 
-import com.elevenpaths.api.APIResponse;
-import com.elevenpaths.api.JsonResponse;
+import com.google.gson.JsonObject;
 
-@Deprecated
-public class LatchResponse<T extends JsonResponse> extends APIResponse<T> {
+public class ClientVersion {
 
-    @Deprecated
-    protected LatchResponse(APIResponse<T> apiResponse) {
-        this.setData(apiResponse.getData());
-        this.setError(apiResponse.getError());
-        this.setClazz(apiResponse.getClazz());
-        this.setDataObject(apiResponse.getDataObject());
+    public static ClientVersion create(JsonObject json) {
+        String platform = null;
+        String app = null;
+        if (json.has("platform")) {
+            platform = json.get("platform").getAsString();
+        }
+        if (json.has("app")) {
+            app = json.get("app").getAsString();
+        }
+        return new ClientVersion(platform, app);
+    }
+
+    private String platform;
+    private String app;
+
+    protected ClientVersion(String platform, String app) {
+        this.platform = platform;
+        this.app = app;
+    }
+
+    public String getPlatform() {
+        return platform;
+    }
+
+    public String getApp() {
+        return app;
     }
 }
