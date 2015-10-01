@@ -145,7 +145,7 @@ public class LatchApp extends LatchAuth {
         }
 
         if (instanceId != null && !instanceId.isEmpty()){
-            url.append("/instance/").append(instanceId);
+            url.append("/i/").append(instanceId);
         }
 
         if (silent) {
@@ -162,8 +162,8 @@ public class LatchApp extends LatchAuth {
         return HTTP_POST_proxy(url.toString(), data);
     }
 
-    public LatchResponse parametrize(String accountId, String operationId, String instanceName){
-        StringBuilder url = new StringBuilder(API_PARAMETRIZE_URL).append("/").append(accountId);
+    public LatchResponse addInstance(String accountId, String operationId, String instanceName){
+        StringBuilder url = new StringBuilder(API_INSTANCE_URL).append("/").append(accountId);
         if (operationId != null && !operationId.isEmpty()){
             url.append("/op/").append(operationId);
         }
@@ -176,12 +176,12 @@ public class LatchApp extends LatchAuth {
         return HTTP_POST_proxy(url.toString(), data);
     }
 
-    public LatchResponse removeParameter(String accountId, String operationId, String instanceId){
-        StringBuilder url = new StringBuilder(API_PARAMETRIZE_URL).append("/").append(accountId);
+    public LatchResponse removeInstance(String accountId, String operationId, String instanceId){
+        StringBuilder url = new StringBuilder(API_INSTANCE_URL).append("/").append(accountId);
         if (operationId != null && !operationId.isEmpty()){
             url.append("/op/").append(operationId);
         }
-        url.append("/instance/").append(instanceId);
+        url.append("/i/").append(instanceId);
 
         return HTTP_DELETE_proxy(url.toString());
     }
