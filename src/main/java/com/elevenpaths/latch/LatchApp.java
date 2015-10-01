@@ -89,7 +89,7 @@ public class LatchApp extends LatchAuth {
         }
 
         if (instanceId != null && !instanceId.isEmpty()){
-            url.append("/instance/").append(instanceId);
+            url.append("/i/").append(instanceId);
         }
 
         if (noOtp) {
