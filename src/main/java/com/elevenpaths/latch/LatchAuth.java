@@ -59,6 +59,7 @@ public class LatchAuth {
     public static final String API_UNLOCK_URL = "/api/"+API_VERSION+"/unlock";
     public static final String API_HISTORY_URL = "/api/"+API_VERSION+"/history";
     public static final String API_OPERATION_URL = "/api/"+API_VERSION+"/operation";
+    public static final String API_PARAMETRIZE_URL = "/api/"+API_VERSION+"/parametrize";
 
     //User API
     public static final String API_APPLICATION_URL = "/api/"+API_VERSION+"/application";
