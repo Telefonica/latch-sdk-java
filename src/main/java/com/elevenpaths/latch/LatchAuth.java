@@ -252,7 +252,7 @@ public class LatchAuth {
         stringToSign.append(queryString.trim());
         if (params != null && !params.isEmpty()) {
             String serializedParams = getSerializedParams(params);
-            if (serializedParams != null && !serializedParams.isEmpty()) {
+            if (serializedParams != null && serializedParams.length() != 0) {
                 stringToSign.append("\n");
                 stringToSign.append(serializedParams);
             }

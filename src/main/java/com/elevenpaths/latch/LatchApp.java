@@ -84,7 +84,8 @@ public class LatchApp extends LatchAuth {
      */
     public LatchResponse status(String accountId, String operationId, boolean silent, boolean noOtp){
         StringBuilder url = new StringBuilder(API_CHECK_STATUS_URL).append("/").append(accountId);
-        if (operationId != null && !operationId.isEmpty()){
+        if (operationId != null && operationId.length() != 0){
+        	
             url.append("/op/").append(operationId);
         }
 
@@ -132,7 +133,7 @@ public class LatchApp extends LatchAuth {
      */
     public LatchResponse status(String accountId, String operationId, boolean silent, String otpToken, String otpMessage){
         StringBuilder url = new StringBuilder(API_CHECK_STATUS_URL).append("/").append(accountId);
-        if (operationId != null && !operationId.isEmpty()){
+        if (operationId != null && operationId.length() != 0){
             url.append("/op/").append(operationId);
         }
 
@@ -141,10 +142,10 @@ public class LatchApp extends LatchAuth {
         }
 
         Map<String, String> data = new HashMap<String, String>();
-        if (otpToken != null && !otpToken.isEmpty()) {
+        if (otpToken != null && otpToken.length() != 0) {
             data.put("otp", otpToken);
         }
-        if (otpMessage != null && !otpMessage.isEmpty()) {
+        if (otpMessage != null && otpMessage.length() != 0) {
             data.put("msg", otpMessage);
         }
         return HTTP_POST_proxy(url.toString(), data);
