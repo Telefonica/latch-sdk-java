@@ -3,7 +3,7 @@
 
 #### PREREQUISITES ####
 
-* Java 1.5 or above.
+* Java 1.6 or above.
 
 * Read API documentation (https://latch.elevenpaths.com/www/developers/doc_api).
 
