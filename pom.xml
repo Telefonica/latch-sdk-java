@@ -4,7 +4,7 @@
 
   <groupId>com.elevenpaths.latch</groupId>
   <artifactId>latch</artifactId>
-  <version>1.1</version>
+  <version>1.1.1</version>
 
   <name>Latch Java SDK</name>
 
