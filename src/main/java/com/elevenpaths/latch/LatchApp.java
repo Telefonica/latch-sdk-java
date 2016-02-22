@@ -50,7 +50,7 @@ public class LatchApp extends LatchAuth {
      * @return LatchResponse containing the status
      */
     public LatchResponse status(String accountId) {
-        return status(accountId, null, false, false);
+        return status(accountId, null, null, false, false);
     }
 
     /**
@@ -61,7 +61,7 @@ public class LatchApp extends LatchAuth {
      * @return LatchResponse containing the status
      */
     public LatchResponse status(String accountId, boolean silent, boolean noOtp) {
-        return status(accountId, null, silent, noOtp);
+        return status(accountId, null, null, silent, noOtp);
     }
 
     /**
@@ -71,7 +71,7 @@ public class LatchApp extends LatchAuth {
      * @return LatchResponse containing the status
      */
     public LatchResponse status(String accountId, String operationId) {
-        return status(accountId, operationId, false, false);
+        return status(accountId, operationId, null, false, false);
     }
 
     /**
@@ -82,11 +82,15 @@ public class LatchApp extends LatchAuth {
      * @param noOtp True for not generating a OTP if needed.
      * @return LatchResponse containing the status
      */
-    public LatchResponse status(String accountId, String operationId, boolean silent, boolean noOtp){
+    public LatchResponse status(String accountId, String operationId, String instanceId, boolean silent, boolean noOtp){
         StringBuilder url = new StringBuilder(API_CHECK_STATUS_URL).append("/").append(accountId);
         if (operationId != null && operationId.length() != 0){
         	
             url.append("/op/").append(operationId);
+        }
+
+        if (instanceId != null && !instanceId.isEmpty()){
+            url.append("/i/").append(instanceId);
         }
 
         if (noOtp) {
@@ -119,7 +123,11 @@ public class LatchApp extends LatchAuth {
      * @return LatchResponse containing the status
      */
     public LatchResponse status(String accountId, boolean silent, String otpToken, String otpMessage){
-        return status(accountId, null, silent, otpToken, otpMessage);
+        return status(accountId, null, null, silent, otpToken, otpMessage);
+    }
+
+    public LatchResponse status(String accountId, String operationId, boolean silent, String otpToken, String otpMessage){
+        return status(accountId, operationId, null, silent, otpToken, otpMessage);
     }
 
     /**
@@ -131,10 +139,14 @@ public class LatchApp extends LatchAuth {
      * @param otpMessage To attach a custom message with the OTP to the user
      * @return LatchResponse containing the status
      */
-    public LatchResponse status(String accountId, String operationId, boolean silent, String otpToken, String otpMessage){
+    public LatchResponse status(String accountId, String operationId, String instanceId, boolean silent, String otpToken, String otpMessage){
         StringBuilder url = new StringBuilder(API_CHECK_STATUS_URL).append("/").append(accountId);
         if (operationId != null && operationId.length() != 0){
             url.append("/op/").append(operationId);
+        }
+
+        if (instanceId != null && !instanceId.isEmpty()){
+            url.append("/i/").append(instanceId);
         }
 
         if (silent) {
@@ -151,14 +163,39 @@ public class LatchApp extends LatchAuth {
         return HTTP_POST_proxy(url.toString(), data);
     }
 
+    public LatchResponse addInstance(String accountId, String operationId, String instanceName){
+        StringBuilder url = new StringBuilder(API_INSTANCE_URL).append("/").append(accountId);
+        if (operationId != null && !operationId.isEmpty()){
+            url.append("/op/").append(operationId);
+        }
+
+        Map<String, String> data = new HashMap<String, String>();
+        if (instanceName != null && !instanceName.isEmpty()) {
+            data.put("instances", instanceName);
+        }
+
+        return HTTP_PUT_proxy(url.toString(), data);
+    }
+
+    public LatchResponse removeInstance(String accountId, String operationId, String instanceId){
+        StringBuilder url = new StringBuilder(API_INSTANCE_URL).append("/").append(accountId);
+        if (operationId != null && !operationId.isEmpty()){
+            url.append("/op/").append(operationId);
+        }
+        url.append("/i/").append(instanceId);
+
+        return HTTP_DELETE_proxy(url.toString());
+    }
+
+
     @Deprecated
     public LatchResponse operationStatus(String accountId, String operationId) {
-        return status(accountId, operationId, false, false);
+        return status(accountId, operationId, null, false, false);
     }
 
     @Deprecated
     public LatchResponse operationStatus(String accountId, String operationId, boolean silent, boolean noOtp) {
-        return status(accountId, operationId, silent, noOtp);
+        return status(accountId, operationId, null, silent, noOtp);
     }
 
     public LatchResponse unpair(String id) {
@@ -166,19 +203,43 @@ public class LatchApp extends LatchAuth {
     }
 
     public LatchResponse lock(String accountId) {
-        return HTTP_POST_proxy(new StringBuilder(API_LOCK_URL).append("/").append(accountId).toString());
+        return lock(accountId, null);
     }
 
     public LatchResponse lock(String accountId, String operationId) {
-        return HTTP_POST_proxy(new StringBuilder(API_LOCK_URL).append("/").append(accountId).append("/op/").append(operationId).toString());
+        return lock(accountId, operationId, null);
+    }
+
+    public LatchResponse lock(String accountId, String operationId, String instanceId) {
+        StringBuilder sb = new StringBuilder(API_LOCK_URL).append("/").append(accountId);
+        if (operationId != null && !operationId.isEmpty()){
+            sb.append("/op/").append(operationId);
+        }
+        if (instanceId != null && !instanceId.isEmpty()){
+            sb.append("/i/").append(instanceId);
+        }
+
+        return HTTP_POST_proxy(sb.toString());
     }
 
     public LatchResponse unlock(String accountId) {
-        return HTTP_POST_proxy(new StringBuilder(API_UNLOCK_URL).append("/").append(accountId).toString());
+        return unlock(accountId, null);
     }
 
     public LatchResponse unlock(String accountId, String operationId) {
-        return HTTP_POST_proxy(new StringBuilder(API_UNLOCK_URL).append("/").append(accountId).append("/op/").append(operationId).toString());
+        return unlock(accountId, operationId, null);
+    }
+
+    public LatchResponse unlock(String accountId, String operationId, String instanceId) {
+        StringBuilder sb = new StringBuilder(API_UNLOCK_URL).append("/").append(accountId);
+        if (operationId != null && !operationId.isEmpty()){
+            sb.append("/op/").append(operationId);
+        }
+        if (instanceId != null && !instanceId.isEmpty()){
+            sb.append("/i/").append(instanceId);
+        }
+
+        return HTTP_POST_proxy(sb.toString());
     }
 
     public LatchResponse history(String accountId) {
