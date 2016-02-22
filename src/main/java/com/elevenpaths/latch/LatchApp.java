@@ -203,19 +203,43 @@ public class LatchApp extends LatchAuth {
     }
 
     public LatchResponse lock(String accountId) {
-        return HTTP_POST_proxy(new StringBuilder(API_LOCK_URL).append("/").append(accountId).toString());
+        return lock(accountId, null);
     }
 
     public LatchResponse lock(String accountId, String operationId) {
-        return HTTP_POST_proxy(new StringBuilder(API_LOCK_URL).append("/").append(accountId).append("/op/").append(operationId).toString());
+        return lock(accountId, operationId);
+    }
+
+    public LatchResponse lock(String accountId, String operationId, String instanceId) {
+        StringBuilder sb = new StringBuilder(API_LOCK_URL).append("/").append(accountId);
+        if (operationId != null && !operationId.isEmpty()){
+            sb.append("/op/").append(operationId);
+        }
+        if (instanceId != null && !instanceId.isEmpty()){
+            sb.append("/i/").append(instanceId);
+        }
+
+        return HTTP_POST_proxy(sb.toString());
     }
 
     public LatchResponse unlock(String accountId) {
-        return HTTP_POST_proxy(new StringBuilder(API_UNLOCK_URL).append("/").append(accountId).toString());
+        return unlock(accountId, null);
     }
 
     public LatchResponse unlock(String accountId, String operationId) {
-        return HTTP_POST_proxy(new StringBuilder(API_UNLOCK_URL).append("/").append(accountId).append("/op/").append(operationId).toString());
+        return unlock(accountId, operationId);
+    }
+
+    public LatchResponse unlock(String accountId, String operationId, String instanceId) {
+        StringBuilder sb = new StringBuilder(API_UNLOCK_URL).append("/").append(accountId);
+        if (operationId != null && !operationId.isEmpty()){
+            sb.append("/op/").append(operationId);
+        }
+        if (instanceId != null && !instanceId.isEmpty()){
+            sb.append("/i/").append(instanceId);
+        }
+
+        return HTTP_POST_proxy(sb.toString());
     }
 
     public LatchResponse history(String accountId) {
