@@ -207,7 +207,7 @@ public class LatchApp extends LatchAuth {
     }
 
     public LatchResponse lock(String accountId, String operationId) {
-        return lock(accountId, operationId);
+        return lock(accountId, operationId, null);
     }
 
     public LatchResponse lock(String accountId, String operationId, String instanceId) {
@@ -227,7 +227,7 @@ public class LatchApp extends LatchAuth {
     }
 
     public LatchResponse unlock(String accountId, String operationId) {
-        return unlock(accountId, operationId);
+        return unlock(accountId, operationId, null);
     }
 
     public LatchResponse unlock(String accountId, String operationId, String instanceId) {
