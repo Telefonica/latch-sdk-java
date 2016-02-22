@@ -47,7 +47,7 @@ import com.ning.http.util.Base64;
  * Use the methods inside LatchAPI and LatchUser class.
  */
 public class LatchAuth {
-    protected static final String API_VERSION = "1.0";
+    protected static final String API_VERSION = "1.1";
     public static String API_HOST = "https://latch.elevenpaths.com";
 
     //App API
