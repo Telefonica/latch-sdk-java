@@ -177,6 +177,7 @@ public class LatchApp extends LatchAuth {
         return HTTP_PUT_proxy(url.toString(), data);
     }
 
+
     public LatchResponse removeInstance(String accountId, String operationId, String instanceId){
         StringBuilder url = new StringBuilder(API_INSTANCE_URL).append("/").append(accountId);
         if (operationId != null && !operationId.isEmpty()){
