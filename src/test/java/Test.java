@@ -7,7 +7,6 @@ import com.elevenpaths.latch.LatchApp;
 import com.elevenpaths.latch.LatchUser;
 import com.elevenpaths.latch.LatchResponse;
 import com.google.gson.JsonElement;
-import com.sun.scenario.effect.impl.sw.java.JSWBlend_SRC_OUTPeer;
 import io.github.cdimascio.dotenv.Dotenv;
 import io.github.cdimascio.dotenv.DotenvBuilder;
 import org.junit.jupiter.api.*;
