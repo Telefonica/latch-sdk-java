@@ -28,10 +28,11 @@ public class LatchApp extends LatchAuth {
 
     /**
      * Create an instance of the class with the Application ID and secret obtained from Eleven Paths
+     *
      * @param appId
      * @param secretKey
      */
-    public LatchApp(String appId, String secretKey){
+    public LatchApp(String appId, String secretKey) {
         this.appId = appId;
         this.secretKey = secretKey;
     }
@@ -46,6 +47,7 @@ public class LatchApp extends LatchAuth {
 
     /**
      * Return application status for a given accountId
+     *
      * @param accountId The accountId which status is going to be retrieved
      * @return LatchResponse containing the status
      */
@@ -55,9 +57,10 @@ public class LatchApp extends LatchAuth {
 
     /**
      * Return application status for a given accountId
+     *
      * @param accountId The accountId which status is going to be retrieved
-     * @param silent True for not sending lock/unlock push notifications to the mobile devices, false otherwise.
-     * @param noOtp True for not generating a OTP if needed.
+     * @param silent    True for not sending lock/unlock push notifications to the mobile devices, false otherwise.
+     * @param noOtp     True for not generating a OTP if needed.
      * @return LatchResponse containing the status
      */
     public LatchResponse status(String accountId, boolean silent, boolean noOtp) {
@@ -66,7 +69,8 @@ public class LatchApp extends LatchAuth {
 
     /**
      * Return operation status for a given accountId and operationId
-     * @param accountId The accountId which status is going to be retrieved
+     *
+     * @param accountId   The accountId which status is going to be retrieved
      * @param operationId The operationId which status is going to be retrieved
      * @return LatchResponse containing the status
      */
@@ -76,20 +80,21 @@ public class LatchApp extends LatchAuth {
 
     /**
      * Return operation status for a given accountId and operationId
-     * @param accountId The accountId which status is going to be retrieved
+     *
+     * @param accountId   The accountId which status is going to be retrieved
      * @param operationId The operationId which status is going to be retrieved
-     * @param silent True for not sending lock/unlock push notifications to the mobile devices, false otherwise.
-     * @param noOtp True for not generating a OTP if needed.
+     * @param silent      True for not sending lock/unlock push notifications to the mobile devices, false otherwise.
+     * @param noOtp       True for not generating a OTP if needed.
      * @return LatchResponse containing the status
      */
-    public LatchResponse status(String accountId, String operationId, String instanceId, boolean silent, boolean noOtp){
+    public LatchResponse status(String accountId, String operationId, String instanceId, boolean silent, boolean noOtp) {
         StringBuilder url = new StringBuilder(API_CHECK_STATUS_URL).append("/").append(accountId);
-        if (operationId != null && operationId.length() != 0){
-        	
+        if (operationId != null && operationId.length() != 0) {
+
             url.append("/op/").append(operationId);
         }
 
-        if (instanceId != null && !instanceId.isEmpty()){
+        if (instanceId != null && !instanceId.isEmpty()) {
             url.append("/i/").append(instanceId);
         }
 
@@ -105,47 +110,50 @@ public class LatchApp extends LatchAuth {
 
     /**
      * Return application status for a given accountId while sending some custom data (Like OTP token or a message)
-     * @param accountId The accountId which status is going to be retrieved
-     * @param otpToken This will be the OTP sent to the user instead of generating a new one
+     *
+     * @param accountId  The accountId which status is going to be retrieved
+     * @param otpToken   This will be the OTP sent to the user instead of generating a new one
      * @param otpMessage To attach a custom message with the OTP to the user
      * @return LatchResponse containing the status
      */
-    public LatchResponse status(String accountId, String otpToken, String otpMessage){
+    public LatchResponse status(String accountId, String otpToken, String otpMessage) {
         return status(accountId, null, false, otpToken, otpMessage);
     }
 
     /**
      * Return application status for a given accountId while sending some custom data (Like OTP token or a message)
-     * @param accountId The accountId which status is going to be retrieved
-     * @param silent True for not sending lock/unlock push notifications to the mobile devices, false otherwise.
-     * @param otpToken This will be the OTP sent to the user instead of generating a new one
+     *
+     * @param accountId  The accountId which status is going to be retrieved
+     * @param silent     True for not sending lock/unlock push notifications to the mobile devices, false otherwise.
+     * @param otpToken   This will be the OTP sent to the user instead of generating a new one
      * @param otpMessage To attach a custom message with the OTP to the user
      * @return LatchResponse containing the status
      */
-    public LatchResponse status(String accountId, boolean silent, String otpToken, String otpMessage){
+    public LatchResponse status(String accountId, boolean silent, String otpToken, String otpMessage) {
         return status(accountId, null, null, silent, otpToken, otpMessage);
     }
 
-    public LatchResponse status(String accountId, String operationId, boolean silent, String otpToken, String otpMessage){
+    public LatchResponse status(String accountId, String operationId, boolean silent, String otpToken, String otpMessage) {
         return status(accountId, operationId, null, silent, otpToken, otpMessage);
     }
 
     /**
      * Return operation status for a given accountId and operation while sending some custom data (Like OTP token or a message)
-     * @param accountId The accountId which status is going to be retrieved
+     *
+     * @param accountId   The accountId which status is going to be retrieved
      * @param operationId The operationId which status is going to be retrieved
-     * @param silent True for not sending lock/unlock push notifications to the mobile devices, false otherwise.
-     * @param otpToken This will be the OTP sent to the user instead of generating a new one
-     * @param otpMessage To attach a custom message with the OTP to the user
+     * @param silent      True for not sending lock/unlock push notifications to the mobile devices, false otherwise.
+     * @param otpToken    This will be the OTP sent to the user instead of generating a new one
+     * @param otpMessage  To attach a custom message with the OTP to the user
      * @return LatchResponse containing the status
      */
-    public LatchResponse status(String accountId, String operationId, String instanceId, boolean silent, String otpToken, String otpMessage){
+    public LatchResponse status(String accountId, String operationId, String instanceId, boolean silent, String otpToken, String otpMessage) {
         StringBuilder url = new StringBuilder(API_CHECK_STATUS_URL).append("/").append(accountId);
-        if (operationId != null && operationId.length() != 0){
+        if (operationId != null && operationId.length() != 0) {
             url.append("/op/").append(operationId);
         }
 
-        if (instanceId != null && !instanceId.isEmpty()){
+        if (instanceId != null && !instanceId.isEmpty()) {
             url.append("/i/").append(instanceId);
         }
 
@@ -163,9 +171,9 @@ public class LatchApp extends LatchAuth {
         return HTTP_POST_proxy(url.toString(), data);
     }
 
-    public LatchResponse addInstance(String accountId, String operationId, String instanceName){
+    public LatchResponse addInstance(String accountId, String operationId, String instanceName) {
         StringBuilder url = new StringBuilder(API_INSTANCE_URL).append("/").append(accountId);
-        if (operationId != null && !operationId.isEmpty()){
+        if (operationId != null && !operationId.isEmpty()) {
             url.append("/op/").append(operationId);
         }
 
@@ -178,9 +186,9 @@ public class LatchApp extends LatchAuth {
     }
 
 
-    public LatchResponse removeInstance(String accountId, String operationId, String instanceId){
+    public LatchResponse removeInstance(String accountId, String operationId, String instanceId) {
         StringBuilder url = new StringBuilder(API_INSTANCE_URL).append("/").append(accountId);
-        if (operationId != null && !operationId.isEmpty()){
+        if (operationId != null && !operationId.isEmpty()) {
             url.append("/op/").append(operationId);
         }
         url.append("/i/").append(instanceId);
@@ -213,10 +221,10 @@ public class LatchApp extends LatchAuth {
 
     public LatchResponse lock(String accountId, String operationId, String instanceId) {
         StringBuilder sb = new StringBuilder(API_LOCK_URL).append("/").append(accountId);
-        if (operationId != null && !operationId.isEmpty()){
+        if (operationId != null && !operationId.isEmpty()) {
             sb.append("/op/").append(operationId);
         }
-        if (instanceId != null && !instanceId.isEmpty()){
+        if (instanceId != null && !instanceId.isEmpty()) {
             sb.append("/i/").append(instanceId);
         }
 
@@ -233,10 +241,10 @@ public class LatchApp extends LatchAuth {
 
     public LatchResponse unlock(String accountId, String operationId, String instanceId) {
         StringBuilder sb = new StringBuilder(API_UNLOCK_URL).append("/").append(accountId);
-        if (operationId != null && !operationId.isEmpty()){
+        if (operationId != null && !operationId.isEmpty()) {
             sb.append("/op/").append(operationId);
         }
-        if (instanceId != null && !instanceId.isEmpty()){
+        if (instanceId != null && !instanceId.isEmpty()) {
             sb.append("/i/").append(instanceId);
         }
 
@@ -249,8 +257,8 @@ public class LatchApp extends LatchAuth {
 
     public LatchResponse history(String accountId, Long from, Long to) {
         return HTTP_GET_proxy(new StringBuilder(API_HISTORY_URL).append("/").append(accountId)
-                                                                .append("/").append(from != null ? String.valueOf(from) :"0")
-                                                                .append("/").append(to != null ? String.valueOf(to) : String.valueOf(new Date().getTime())).toString());
+                .append("/").append(from != null ? String.valueOf(from) : "0")
+                .append("/").append(to != null ? String.valueOf(to) : String.valueOf(new Date().getTime())).toString());
     }
 
     public LatchResponse createOperation(String parentId, String name, String twoFactor, String lockOnRequest) {
