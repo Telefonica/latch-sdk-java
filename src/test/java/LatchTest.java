@@ -46,6 +46,7 @@ class LatchTest {
     @DisplayName("First test latch")
     void testAppLatchPairInvalidToken() {
         LatchResponse response = this.latchApp.pair("fP9zpg");
+        assertEquals (response.hasErrors(), true);
         assertEquals(response.getError().getMessage(), "Token not found or expired");
 
 
@@ -119,6 +120,6 @@ class LatchTest {
     void test_latch_status() {
         LatchResponse response = this.latchApp.status(this.account_id);
         String status_app = response.getData().get("operations").getAsJsonObject().get(this.app_id).getAsJsonObject().get("status").getAsString();
-        assertEquals(status_app,"on");
+        assertEquals("on",status_app);
     }
 }

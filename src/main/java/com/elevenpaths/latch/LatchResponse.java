@@ -107,6 +107,15 @@ public class LatchResponse {
         return edition;
     }
 
+    public Boolean hasErrors(){
+        return (error != null && error.getMessage() != "");
+    }
+
+    @Override
+    public String toString() {
+        return toJSON().toString();
+    }
+
 
 
 }

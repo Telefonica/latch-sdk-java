@@ -6,3 +6,6 @@ target/
 .idea
 *.iml
 src/test/resources/.env
+.gradle
+build
+gradle
