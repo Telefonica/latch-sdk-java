@@ -108,7 +108,7 @@ public class LatchResponse {
     }
 
     public Boolean hasErrors(){
-        return (error != null && error.getMessage() != "");
+        return (error != null && !error.getMessage().equals(""));
     }
 
     @Override
