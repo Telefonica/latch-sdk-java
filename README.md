@@ -43,9 +43,9 @@ For using the Java SDK within an Web3 service, you must complain with the follow
 ```
      LatchResponse pairResponse = latch.pair(token, web3wallet, web3Signature);
 ```
-The two additional parameters are
-** web3Wallet: The Ethereum-based address wallet for the user that wants to pair the service.
-** web3Signature: A proof-of-ownership signature of a constant, in order to verify that the user owns the private key of the wallet.
+The two additional parameters are:
+- web3Wallet: The Ethereum-based address wallet for the user that wants to pair the service.
+- web3Signature: A proof-of-ownership signature of a constant, in order to verify that the user owns the private key of the wallet.
 Example in Javascript: [[https://web3js.readthedocs.io/en/v1.2.9/web3-eth.html#sign]]
 
 
