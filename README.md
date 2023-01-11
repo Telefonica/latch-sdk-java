@@ -10,6 +10,15 @@
 * To get the "Application ID" and "Secret", (fundamental values for integrating Latch in any application), it’s necessary to register a developer account in Latch's website: https://latch.telefonica.com. On the upper right side, click on "Developer area".
 
 
+#### CREATING THE JAR DEPENDENCY ####
+
+Now using Maven (maven.apache.org) is easy to compile and pack all the code for using externally:
+
+> mvn clean compile assembly:single
+
+And the compiled jar was located in the `target` directory.
+
+
 #### USING THE SDK IN JAVA ####
 
 * Include all SDK files and dependencies in your project.
