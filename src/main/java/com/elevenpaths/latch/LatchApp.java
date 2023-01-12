@@ -59,7 +59,7 @@ public class LatchApp extends LatchAuth {
      * @return LatchResponse for the operation
      */
     public LatchResponse pairWithId(String id, String web3Wallet, String web3Signature) {
-        HashMap<String, String> data = new HashMap<>();
+        HashMap<String, String> data = new HashMap();
         data.put("wallet", web3Wallet);
         data.put("signature", web3Signature);
         return HTTP_POST_proxy(API_PAIR_WITH_ID_URL+"/"+id, data);
@@ -72,7 +72,7 @@ public class LatchApp extends LatchAuth {
      * @return LatchResponse for the operation
      */
     public LatchResponse pair(String token, String web3Wallet, String web3Signature) {
-        HashMap<String, String> data = new HashMap<>();
+        HashMap<String, String> data = new HashMap();
         data.put("wallet", web3Wallet);
         data.put("signature", web3Signature);
         return HTTP_POST_proxy(API_PAIR_URL+"/"+token, data);

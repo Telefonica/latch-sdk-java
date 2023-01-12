@@ -14,9 +14,13 @@
 
 Now using Maven (maven.apache.org) is easy to compile and pack all the code for using externally:
 
-> mvn clean compile assembly:single
+> mvn install
 
 And the compiled jar was located in the `target` directory.
+
+You can also compile the jar with all Latch dependencies included:
+
+> mvn clean compile assembly:single
 
 
 #### USING THE SDK IN JAVA ####
