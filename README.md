@@ -54,17 +54,14 @@ For using the Java SDK within an Web3 service, you must complain with the follow
 
 * [Tutorial to follow for creating a new WEB3 app](doc/Latch_WEB3_Apps.pdf)
 
-* Call to Latch Server for pairing as usual, but with the newly methods:
-```
-     LatchResponse pairResponse = latch.pair(token, web3wallet, web3Signature);
-```
+* You need a wallet to operate on Polygon blockchain. You can easily create one through [Metamask](https://metamask.io/download/).
 
-The two additional parameters are:
+You need this additional parameters:
 - WEB3WALLET: The Ethereum-based address wallet for the user that wants to pair the service.
 - WEB3SIGNATURE: A proof-of-ownership signature of a constant, in order to verify that the user owns the private key of the wallet. You can use https://etherscan.io/verifiedSignatures# to sign the following message:
 - MESSAGE TO SIGN : **"Latch-Web3"**
 
-* Full example:
+Example of using it:
 ```java
 LatchApp latchApp = new LatchApp("<App_ID>", "<Secret>"); // Data from service creation
 // Pairing code generated from Latch app
