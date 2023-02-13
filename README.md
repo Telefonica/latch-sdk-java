@@ -52,18 +52,36 @@ For using the Java SDK within an Web3 service, you must complain with the follow
 
 * In the Latch website, having an developer account, with the Web3 permissions activated. You must see a new button for creating a Web3 new app.
 
+* [Tutorial to follow for creating a new WEB3 app](doc/Latch_WEB3_Apps.pdf)
+
 * Call to Latch Server for pairing as usual, but with the newly methods:
 ```
      LatchResponse pairResponse = latch.pair(token, web3wallet, web3Signature);
 ```
-The two additional parameters are:
-- web3Wallet: The Ethereum-based address wallet for the user that wants to pair the service.
-- web3Signature: A proof-of-ownership signature of a constant, in order to verify that the user owns the private key of the wallet.
-Example in Javascript: [[https://web3js.readthedocs.io/en/v1.2.9/web3-eth.html#sign]]
 
+The two additional parameters are:
+- WEB3WALLET: The Ethereum-based address wallet for the user that wants to pair the service.
+- WEB3SIGNATURE: A proof-of-ownership signature of a constant, in order to verify that the user owns the private key of the wallet. You can use https://etherscan.io/verifiedSignatures# to sign the following message:
+- MESSAGE TO SIGN : **"Latch-Web3"**
+
+* Full example:
+```java
+LatchApp latchApp = new LatchApp("<App_ID>", "<Secret>"); // Data from service creation
+// Pairing code generated from Latch app
+Scanner sc = new Scanner(System.in);
+String pairingCode = sc.nextLine();
+LatchResponse response = latchApp.pair(pairingCode, "<WEB3WALLET>", "<WEB3SIGNATURE>"); 
+if (!response.hasErrors()) {
+     String accountId = response.getData().get("accountId").getAsString();
+     // This accountId must be stored for the user
+} else {
+     // Error
+     System.out.println("Error: "+response.getError().getMessage());
+}
+```
 
 #### TROUBLESHOOTING ####
 
 *A javax.net.ssl.SSLHandshakeException with a nested sun.security.validator.ValidatorException is thrown when invoking an API call.*
 
-This exception is normally thrown when the JDK doesn't trust the CA that signs the digital certificate used in Latch's website (https://latch.elevenpaths.com). You may need to install the CA (http://www.startssl.com/certs/ca.pem) as a trusted certificate in your JDK's truststore (normally in jre/lib/security/cacerts) using the keytool utility.
+This exception is normally thrown when the JDK doesn't trust the CA that signs the digital certificate used in Latch's website (https://latch.telefonica.com). You may need to install the CA (http://www.startssl.com/certs/ca.pem) as a trusted certificate in your JDK's truststore (normally in jre/lib/security/cacerts) using the keytool utility.
