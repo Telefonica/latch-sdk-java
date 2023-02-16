@@ -5,3 +5,7 @@ target/
 .DS_Store
 .idea
 *.iml
+src/test/resources/.env
+.gradle
+build
+gradle
