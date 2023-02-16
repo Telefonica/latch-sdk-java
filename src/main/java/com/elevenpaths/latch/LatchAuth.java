@@ -48,7 +48,7 @@ import com.ning.http.util.Base64;
  */
 public class LatchAuth {
     protected static final String API_VERSION = "2.0";
-    public static String API_HOST = "https://latch.telefonica.com";
+    public static String API_HOST = "https://latch.d-consumer.com";
 
     //App API
     public static final String API_CHECK_STATUS_URL = "/api/"+API_VERSION+"/status";
