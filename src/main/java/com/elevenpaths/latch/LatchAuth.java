@@ -1,5 +1,5 @@
 /*Latch Java SDK - Set of  reusable classes to  allow developers integrate Latch on their applications.
-Copyright (C) 2013 Eleven Paths
+Copyright (C) 2013 Telefonica Digital España S.L.
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -48,7 +48,7 @@ import com.ning.http.util.Base64;
  */
 public class LatchAuth {
     protected static final String API_VERSION = "1.1";
-    public static String API_HOST = "https://latch.elevenpaths.com";
+    public static String API_HOST = "https://latch.telefonica.com";
 
     //App API
     public static final String API_CHECK_STATUS_URL = "/api/"+API_VERSION+"/status";
