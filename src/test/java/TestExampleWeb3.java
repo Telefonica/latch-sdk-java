@@ -11,18 +11,17 @@ import java.sql.SQLOutput;
 
 public class TestExampleWeb3 {
 
-    //public static String appId = "<Your appId>";
-    public static String appId = "DXnMh3uCWL39upnNW2GE";
-
-    public static String secretId = "DD3gGipwQ4FbZaFRgARUXCMCNfbrHii9hXiRgdxN";
-
-    //public static String wallet = "<Your public key of your wallet>";
-    public static String wallet = "0x7fd12f68757721e7671979db0eef8a8ddcfd69db";
-    //public static String signature = "<Sign the message \"Latch-Web3\" with your wallet >";
-    public static String signature = "0xe760de5774a623ced768c97d3e395e5a93f430b4f1e5407d0ebfd731a6f888612ac933f772807548fd81cb9672294994f35be9dc7ca59fb9c3455921438dae081b";
+    public static String appId = "<Your appId>";
 
 
-    public static String readInput(){
+    public static String secretId = "<your secret id>";
+
+    public static String wallet = "<Your public key of your wallet>";
+
+    public static String signature = "<Sign the message \"Latch-Web3\" with your wallet >";
+
+
+    public static String readInput() {
         System.out.print("Enter token: ");
         BufferedReader reader = new BufferedReader(
                 new InputStreamReader(System.in));
@@ -34,19 +33,48 @@ public class TestExampleWeb3 {
         }
     }
 
-    public static void pair(String app_id, String secret_id){
+    public static String pair(String app_id, String secret_id) {
         LatchApp latchApp = new LatchApp(app_id, secret_id);
         String token = readInput();
+        String accountId = null;
         LatchResponse latchResponse = latchApp.pair(token, wallet, signature);
-        if (latchResponse.hasErrors()){
+        if (latchResponse.hasErrors()) {
             System.out.println(String.format("Error pairing: %s", latchResponse.getError().getMessage()));
+        } else {
+            accountId = latchResponse.getData().get("accountId").getAsString();
         }
-        latchResponse.getData();
+        return accountId;
 
     }
 
+    public static void unPair(String app_id, String secret_id, String accountId) {
+        LatchApp latchApp = new LatchApp(app_id, secret_id);
+        LatchResponse latchResponse = latchApp.unlock(accountId);
+        if (latchResponse.hasErrors()) {
+            System.out.println(String.format("Error unpairing: %s", latchResponse.getError().getMessage()));
+        } else {
+            System.out.println("Succesfull Unpairing");
+        }
+
+
+    }
+
+    public static void getStatus(String app_id, String secret_id, String accountId) {
+        LatchApp latchApp = new LatchApp(app_id, secret_id);
+        LatchResponse latchResponse = latchApp.status(accountId);
+        if (latchResponse.hasErrors()) {
+            System.out.println(String.format("Error unpairing: %s", latchResponse.getError().getMessage()));
+        } else {
+            System.out.println(String.format("Status %s", latchResponse.getData().toString()));
+        }
+
+
+    }
 
     public static void main(String[] args) {
-        pair(appId, secretId);
+        String accountId = pair(appId, secretId);
+        getStatus(appId, secretId, accountId);
+        unPair(appId, secretId, accountId);
+
     }
 }
