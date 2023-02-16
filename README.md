@@ -61,21 +61,8 @@ You need this additional parameters:
 - WEB3SIGNATURE: A proof-of-ownership signature of a constant, in order to verify that the user owns the private key of the wallet. You can use https://etherscan.io/verifiedSignatures# to sign the following message:
 - MESSAGE TO SIGN : **"Latch-Web3"**
 
-Example of using it:
-```java
-LatchApp latchApp = new LatchApp("<App_ID>", "<Secret>"); // Data from service creation
-// Pairing code generated from Latch app
-Scanner sc = new Scanner(System.in);
-String pairingCode = sc.nextLine();
-LatchResponse response = latchApp.pair(pairingCode, "<WEB3WALLET>", "<WEB3SIGNATURE>"); 
-if (!response.hasErrors()) {
-     String accountId = response.getData().get("accountId").getAsString();
-     // This accountId must be stored for the user
-} else {
-     // Error
-     System.out.println("Error: "+response.getError().getMessage());
-}
-```
+Example of using it [java example](src/test/java/TestExampleWeb3.java)
+
 
 #### TROUBLESHOOTING ####
 
