@@ -55,7 +55,7 @@ public class LatchResponse {
             }
             if (json.getAsJsonObject().has("error")) {
                 this.error = new Error(json.getAsJsonObject().getAsJsonObject("error").get("code").getAsInt(),
-                            json.getAsJsonObject().getAsJsonObject("error").get("message").getAsString());
+                                       json.getAsJsonObject().getAsJsonObject("error").get("message").getAsString());
             }
         }
     }
@@ -98,16 +98,16 @@ public class LatchResponse {
      */
     public JsonObject toJSON() {
         JsonObject edition = new JsonObject();
-        if(data != null) {
+        if (data != null) {
             edition.add("data", data);
         }
-        if(error != null) {
+        if (error != null) {
             edition.add("error", getError().toJson());
         }
         return edition;
     }
 
-    public Boolean hasErrors(){
+    public Boolean hasErrors() {
         return (error != null && !error.getMessage().equals(""));
     }
 
@@ -115,7 +115,5 @@ public class LatchResponse {
     public String toString() {
         return toJSON().toString();
     }
-
-
 
 }
