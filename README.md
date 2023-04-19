@@ -21,6 +21,7 @@ And the compiled jar was located in the `target` directory.
 You can also compile the jar with all Latch dependencies included:
 
 > mvn clean compile assembly:single
+=======
 
 
 #### USING THE SDK IN JAVA ####
