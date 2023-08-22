@@ -34,6 +34,10 @@ public class TestExampleWeb3 {
 
     public static String signature = "<Sign the message \"Latch-Web3\" with your wallet >";
 
+    public static String accountName = "<Your account id>";
+
+    public static String operationId =  "<The opperation id>";
+
 
     public static String readInput() {
         System.out.print("Enter token: ");
@@ -61,6 +65,18 @@ public class TestExampleWeb3 {
 
     }
 
+    public static String pairWithId(String app_id, String secret_id) {
+        LatchApp latchApp = new LatchApp(app_id, secret_id);
+        LatchResponse latchResponse = latchApp.pairWithId(accountName, wallet, signature);
+        String accountId = null;
+        if (latchResponse.hasErrors()) {
+            System.out.println(String.format("Error pairing: %s", latchResponse.getError().getMessage()));
+        } else {
+            accountId = latchResponse.getData().get("accountId").getAsString();
+        }
+        return accountId;
+    }
+
     public static void unPair(String app_id, String secret_id, String accountId) {
         LatchApp latchApp = new LatchApp(app_id, secret_id);
         LatchResponse latchResponse = latchApp.unlock(accountId);
@@ -84,6 +100,50 @@ public class TestExampleWeb3 {
 
 
     }
+
+    public static void getOperationStatus(String app_id, String secret_id, String accountId) {
+        LatchApp latchApp = new LatchApp(app_id, secret_id);
+        LatchResponse latchResponse = latchApp.operationStatus(accountId, operationId);
+        if (latchResponse.hasErrors()) {
+            System.out.println(String.format("Error unpairing: %s", latchResponse.getError().getMessage()));
+        } else {
+            System.out.println(String.format("Status %s", latchResponse.getData().toString()));
+        }
+    }
+
+    public static void lock(String app_id, String secret_id, String accountId) {
+        LatchApp latchApp = new LatchApp(app_id, secret_id);
+        LatchResponse latchResponse = latchApp.lock(accountId);
+        if (latchResponse.hasErrors()) {
+            System.out.println(String.format("Error locking: %s", latchResponse.getError().getMessage()));
+        } else {
+            System.out.println("Succesfull locking");
+        }
+
+    }
+
+    public static void unlock(String app_id, String secret_id, String accountId) {
+        LatchApp latchApp = new LatchApp(app_id, secret_id);
+        LatchResponse latchResponse = latchApp.unlock(accountId);
+        if (latchResponse.hasErrors()) {
+            System.out.println(String.format("Error unlocking: %s", latchResponse.getError().getMessage()));
+        } else {
+            System.out.println("Succesfull unlocking");
+        }
+
+    }
+
+    public static void unpair(String app_id, String secret_id, String accountId) {
+        LatchApp latchApp = new LatchApp(app_id, secret_id);
+        LatchResponse latchResponse = latchApp.unpair(accountId);
+        if (latchResponse.hasErrors()) {
+            System.out.println(String.format("Error unpairing: %s", latchResponse.getError().getMessage()));
+        } else {
+            System.out.println("Succesfull unpairing");
+        }
+
+    }
+
 
     public static void main(String[] args) {
         String accountId = pair(appId, secretId);
