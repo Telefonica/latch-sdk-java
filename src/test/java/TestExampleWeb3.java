@@ -75,7 +75,6 @@ public class TestExampleWeb3 {
             accountId = latchResponse.getData().get("accountId").getAsString();
         }
         return accountId;
-        
     }
 
     public static void unPair(String app_id, String secret_id, String accountId) {
