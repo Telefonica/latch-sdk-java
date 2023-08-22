@@ -109,7 +109,6 @@ public class TestExampleWeb3 {
         } else {
             System.out.println(String.format("Status %s", latchResponse.getData().toString()));
         }
-
     }
 
     public static void lock(String app_id, String secret_id, String accountId) {
