@@ -304,4 +304,8 @@ public class LatchApp extends LatchAuth {
         return HTTP_POST_proxy(new StringBuilder(API_OPERATION_URL).append("/").append(operationId).toString(), data);
     }
 
+    public LatchResponse checkAuthorizationControlStatus(String authorizationControlId) {
+        return HTTP_GET_proxy(new StringBuilder(API_CHECK_AUTHORIZATION_CONTROL_STATUS_URL).append("/").append(authorizationControlId).toString());
+    }
+
 }
