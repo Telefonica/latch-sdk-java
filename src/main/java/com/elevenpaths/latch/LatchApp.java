@@ -304,4 +304,32 @@ public class LatchApp extends LatchAuth {
         return HTTP_POST_proxy(new StringBuilder(API_OPERATION_URL).append("/").append(operationId).toString(), data);
     }
 
+    public LatchResponse createTOTP(String userId, String commonName) {
+        Map<String, String> data = new HashMap<String, String>();
+        data.put("userId", userId);
+        data.put("commonName", commonName);
+        return HTTP_POST_proxy(API_TOTP_URL, data);
+    }
+
+    public LatchResponse deleteTOTP(String totpId) {
+        return HTTP_DELETE_proxy(new StringBuilder(API_TOTP_URL).append("/").append(totpId).toString());
+    }
+
+    public LatchResponse getTOTP(String totpId) {
+        return HTTP_GET_proxy(new StringBuilder(API_TOTP_URL).append("/").append(totpId).toString());
+    }
+
+    public LatchResponse validateTOTP(String totpId, String code) {
+        Map<String, String> data = new HashMap<String, String>();
+        data.put("code", code);
+        return HTTP_POST_proxy(new StringBuilder(API_TOTP_URL).append("/").append(totpId).append("/validate").toString(), data);
+    }
+
+    public LatchResponse createQSecret(int length, String encoding) {
+        Map<String, String> data = new HashMap<String, String>();
+        data.put("length", String.valueOf(length));
+        data.put("encoding", encoding);
+        return HTTP_POST_proxy(API_Q_SECRET_URL, data);
+    }
+
 }
