@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 
-public class TestExampleWeb3 {
+public class ExampleWeb3 {
 
     public static String appId = "<Your appId>";
 

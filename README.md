@@ -62,7 +62,7 @@ You need this additional parameters:
 - WEB3SIGNATURE: A proof-of-ownership signature of a constant, in order to verify that the user owns the private key of the wallet. You can use https://etherscan.io/verifiedSignatures# to sign the following message:
 - MESSAGE TO SIGN : **"Latch-Web3"**
 
-Example of using it [java example](src/test/java/TestExampleWeb3.java)
+Example of using it [java example](src/test/java/ExampleWeb3.java)
 
 
 #### TROUBLESHOOTING ####
