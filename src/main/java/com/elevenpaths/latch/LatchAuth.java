@@ -60,6 +60,8 @@ public class LatchAuth {
     public static final String API_HISTORY_URL = "/api/"+API_VERSION+"/history";
     public static final String API_OPERATION_URL = "/api/"+API_VERSION+"/operation";
     public static final String API_INSTANCE_URL = "/api/"+API_VERSION+"/instance";
+    public static final String API_TOTP_URL = "/api/" + API_VERSION + "/totps";
+    public static final String API_CONTROL_STATUS_CHECK_URL = "/api/" + API_VERSION + "/control-status";
 
     //User API
     public static final String API_APPLICATION_URL = "/api/"+API_VERSION+"/application";

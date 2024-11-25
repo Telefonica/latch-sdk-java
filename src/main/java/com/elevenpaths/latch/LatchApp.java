@@ -304,4 +304,56 @@ public class LatchApp extends LatchAuth {
         return HTTP_POST_proxy(new StringBuilder(API_OPERATION_URL).append("/").append(operationId).toString(), data);
     }
 
+    /**
+     * Create a Time-based one-time password
+     * @param userId User identifier (mail)
+     * @param commonName Name for the Totp
+     * @return LatchResponse containing the status
+     */
+    public LatchResponse createTOTP(String userId, String commonName) {
+        Map<String, String> data = new HashMap<String, String>();
+        data.put("userId", userId);
+        data.put("commonName", commonName);
+        return HTTP_POST_proxy(API_TOTP_URL, data);
+    }
+
+    /**
+     * Get data information about the totp
+     * @param totpId Totp Identifier
+     * @return LatchResponse containing the status
+     */
+    public LatchResponse getTOTP(String totpId) {
+        return HTTP_GET_proxy(new StringBuilder(API_TOTP_URL).append("/").append(totpId).toString());
+    }
+
+    /**
+     * Validate a code from a totp
+     * @param totpId Totp Identifier
+     * @param code Code generated
+     * @return LatchResponse containing the status
+     */
+    public LatchResponse validateTOTP(String totpId, String code) {
+        Map<String, String> data = new HashMap<String, String>();
+        data.put("code", code);
+        return HTTP_POST_proxy(new StringBuilder(API_TOTP_URL).append("/").append(totpId).append("/validate").toString(), data);
+    }
+
+    /**
+     * Remove a totp
+     * @param totpId Totp Identifier
+     * @return LatchResponse containing the status
+     */
+    public LatchResponse deleteTOTP(String totpId) {
+        return HTTP_DELETE_proxy(new StringBuilder(API_TOTP_URL).append("/").append(totpId).toString());
+    }
+
+    /**
+     * Check operation status
+     * @param controlId Control status indentifier
+     * @return LatchResponse containing the status
+     */
+    public LatchResponse checkControlStatus(int controlId) {
+        return HTTP_POST_proxy(API_CONTROL_STATUS_CHECK_URL);
+    }
+
 }
