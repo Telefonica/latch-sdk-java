@@ -431,7 +431,7 @@ public class LatchApp extends LatchAuth {
      * @param commonName Name for the Totp
      * @return LatchResponse containing the status
      */
-    public LatchResponse createTOTP(String userId, String commonName) {
+    public LatchResponse createTotp(String userId, String commonName) {
         Map<String, String> data = new HashMap<String, String>();
         data.put("userId", userId);
         data.put("commonName", commonName);
@@ -443,7 +443,7 @@ public class LatchApp extends LatchAuth {
      * @param totpId Totp Identifier
      * @return LatchResponse containing the status
      */
-    public LatchResponse getTOTP(String totpId) {
+    public LatchResponse getTotp(String totpId) {
         return HTTP_GET_proxy(new StringBuilder(API_TOTP_URL).append("/").append(totpId).toString());
     }
 
@@ -453,7 +453,7 @@ public class LatchApp extends LatchAuth {
      * @param code Code generated
      * @return LatchResponse containing the status
      */
-    public LatchResponse validateTOTP(String totpId, String code) {
+    public LatchResponse validateTotp(String totpId, String code) {
         Map<String, String> data = new HashMap<String, String>();
         data.put("code", code);
         return HTTP_POST_proxy(new StringBuilder(API_TOTP_URL).append("/").append(totpId).append("/validate").toString(), data);
@@ -464,7 +464,7 @@ public class LatchApp extends LatchAuth {
      * @param totpId Totp Identifier
      * @return LatchResponse containing the status
      */
-    public LatchResponse deleteTOTP(String totpId) {
+    public LatchResponse removeTotp(String totpId) {
         return HTTP_DELETE_proxy(new StringBuilder(API_TOTP_URL).append("/").append(totpId).toString());
     }
 
