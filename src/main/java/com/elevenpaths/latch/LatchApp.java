@@ -470,11 +470,11 @@ public class LatchApp extends LatchAuth {
 
     /**
      * Check operation status
-     * @param controlId Control status indentifier
+     * @param controlId Control status identifier
      * @return LatchResponse containing the status
      */
-    public LatchResponse checkControlStatus(int controlId) {
-        return HTTP_POST_proxy(API_CONTROL_STATUS_CHECK_URL);
+    public LatchResponse checkControlStatus(String controlId) {
+        return HTTP_GET_proxy(new StringBuilder(API_CONTROL_STATUS_CHECK_URL).append("/").append(controlId).toString());
     }
 
 }
