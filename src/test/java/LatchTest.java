@@ -1,5 +1,5 @@
 /*Latch Java SDK - Set of  reusable classes to  allow developers integrate Latch on their applications.
-Copyright (C) 2023 Telefonica Digital España S.L.
+ Copyright (C) 2024 Telefonica Innovación Digital España S.L.
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -136,5 +136,27 @@ class LatchTest {
         LatchResponse response = this.latchApp.status(this.account_id);
         String status_app = response.getData().get("operations").getAsJsonObject().get(this.app_id).getAsJsonObject().get("status").getAsString();
         assertEquals("on",status_app);
+    }
+
+    @Test
+    @DisplayName("Test crud totp")
+    void test_crud_totp() {
+        LatchResponse response = this.latchApp.createTotp("TOTP_TEST","CommonName");
+        String totpId = response.getData().get("totpId").getAsString();
+        response = this.latchApp.getTotp(totpId);
+        assertEquals(totpId,response.getData().get("totpId").getAsString());
+        response = this.latchApp.validateTotp(totpId,"123456");
+        assertEquals("Invalid totp code",response.getError().getMessage());
+        assertEquals(306,response.getError().getCode());
+        response = this.latchApp.removeTotp(totpId);
+        assertNull(null, response.getError());
+    }
+
+    @Test
+    @DisplayName("Test check control status")
+    void test_control_status() {
+        LatchResponse response = this.latchApp.checkControlStatus("12345");
+        assertEquals("Authorization control not found",response.getError().getMessage());
+        assertEquals(1100,response.getError().getCode());
     }
 }

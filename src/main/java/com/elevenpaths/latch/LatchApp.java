@@ -1,5 +1,5 @@
 /*Latch Java SDK - Set of  reusable classes to  allow developers integrate Latch on their applications.
-Copyright (C) 2023 Telefonica Digital
+ Copyright (C) 2024 Telefonica Innovación Digital
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -157,6 +157,15 @@ public class LatchApp extends LatchAuth {
         return status(accountId, null, null, silent, otpToken, otpMessage);
     }
 
+    /**
+     * Return operation status for a given accountId and operation while sending some custom data (Like OTP token or a message)
+     * @param accountId The accountId which status is going to be retrieved
+     * @param operationId The operationId which status is going to be retrieved
+     * @param silent True for not sending lock/unlock push notifications to the mobile devices, false otherwise.
+     * @param otpToken This will be the OTP sent to the user instead of generating a new one
+     * @param otpMessage To attach a custom message with the OTP to the user
+     * @return LatchResponse containing the status
+     */
     public LatchResponse status(String accountId, String operationId, boolean silent, String otpToken, String otpMessage) {
         return status(accountId, operationId, null, silent, otpToken, otpMessage);
     }
@@ -165,6 +174,7 @@ public class LatchApp extends LatchAuth {
      * Return operation status for a given accountId and operation while sending some custom data (Like OTP token or a message)
      * @param accountId The accountId which status is going to be retrieved
      * @param operationId The operationId which status is going to be retrieved
+     * @param instanceId The instance identifier
      * @param silent True for not sending lock/unlock push notifications to the mobile devices, false otherwise.
      * @param otpToken This will be the OTP sent to the user instead of generating a new one
      * @param otpMessage To attach a custom message with the OTP to the user
@@ -191,6 +201,13 @@ public class LatchApp extends LatchAuth {
         return HTTP_POST_proxy(url.toString(), data);
     }
 
+    /**
+     * Create an instance
+     * @param accountId The user identified
+     * @param operationId The operation identifier
+     * @param instanceName The name for the instance
+     * @return LatchResponse containing the status
+     */
     public LatchResponse addInstance(String accountId, String operationId, String instanceName) {
         StringBuilder url = new StringBuilder(API_INSTANCE_URL).append("/").append(accountId);
         if (operationId != null && !operationId.isEmpty()) {
@@ -203,6 +220,13 @@ public class LatchApp extends LatchAuth {
         return HTTP_PUT_proxy(url.toString(), data);
     }
 
+    /**
+     * Remove the instance
+     * @param accountId The user identified
+     * @param operationId The operation identifier
+     * @param instanceId The instance identifier
+     * @return LatchResponse containing the status
+     */
     public LatchResponse removeInstance(String accountId, String operationId, String instanceId) {
         StringBuilder url = new StringBuilder(API_INSTANCE_URL).append("/").append(accountId);
         if (operationId != null && !operationId.isEmpty()) {
@@ -213,28 +237,65 @@ public class LatchApp extends LatchAuth {
     }
 
 
+    /**
+     * Return operation status for a given accountId
+     * @param accountId The user identified
+     * @param operationId The operation identifier
+     * @return LatchResponse containing the status
+     */
     @Deprecated
     public LatchResponse operationStatus(String accountId, String operationId) {
         return status(accountId, operationId, null, false, false);
     }
 
+    /**
+     * Return operation status for a given accountId
+     * @param accountId The user identified
+     * @param operationId The operation identifier
+     * @param silent True for not sending lock/unlock push notifications to the mobile devices, false otherwise
+     * @param noOtp True for not generating an OTP if needed
+     * @return LatchResponse containing the status
+     */
     @Deprecated
     public LatchResponse operationStatus(String accountId, String operationId, boolean silent, boolean noOtp) {
         return status(accountId, operationId, null, silent, noOtp);
     }
 
+    /**
+     * Unpairs the origin provider with a user account.
+     * @param  id The account identified
+     * @return LatchResponse containing the status
+     */
     public LatchResponse unpair(String id) {
         return HTTP_GET_proxy(new StringBuilder(API_UNPAIR_URL).append("/").append(id).toString());
     }
 
+    /**
+     * Locks the operation
+     * @param accountId The user identified
+     * @return LatchResponse containing the status
+     */
     public LatchResponse lock(String accountId) {
         return lock(accountId, null);
     }
 
+    /**
+     * Locks the operation
+     * @param accountId The user identified
+     * @param operationId The operation identifier
+     * @return LatchResponse containing the status
+     */
     public LatchResponse lock(String accountId, String operationId) {
         return lock(accountId, operationId, null);
     }
 
+    /**
+     * Locks the operation
+     * @param accountId The user identified
+     * @param operationId The operation identifier
+     * @param instanceId The instance identifier
+     * @return LatchResponse containing the status
+     */
     public LatchResponse lock(String accountId, String operationId, String instanceId) {
         StringBuilder sb = new StringBuilder(API_LOCK_URL).append("/").append(accountId);
         if (operationId != null && !operationId.isEmpty()) {
@@ -246,14 +307,32 @@ public class LatchApp extends LatchAuth {
         return HTTP_POST_proxy(sb.toString());
     }
 
+    /**
+     * Unlocks the operation
+     * @param accountId The user identified
+     * @return LatchResponse containing the status
+     */
     public LatchResponse unlock(String accountId) {
         return unlock(accountId, null);
     }
 
+    /**
+     * Unlocks the operation
+     * @param accountId The user identified
+     * @param operationId The operation identifier
+     * @return LatchResponse containing the status
+     */
     public LatchResponse unlock(String accountId, String operationId) {
         return unlock(accountId, operationId, null);
     }
 
+    /**
+     * Unlocks the operation
+     * @param accountId The user identified
+     * @param operationId The operation identifier
+     * @param instanceId The instance identifier
+     * @return LatchResponse containing the status
+     */
     public LatchResponse unlock(String accountId, String operationId, String instanceId) {
         StringBuilder sb = new StringBuilder(API_UNLOCK_URL).append("/").append(accountId);
         if (operationId != null && !operationId.isEmpty()) {
@@ -265,16 +344,36 @@ public class LatchApp extends LatchAuth {
         return HTTP_POST_proxy(sb.toString());
     }
 
+    /**
+     * Get history status
+     * @param accountId The user identified
+     * @return LatchResponse containing the status
+     */
     public LatchResponse history(String accountId) {
         return HTTP_GET_proxy(new StringBuilder(API_HISTORY_URL).append("/").append(accountId).toString());
     }
 
+    /**
+     * Get history status
+     * @param accountId The user identified
+     * @param from From in epoch format
+     * @param to To in epoch format
+     * @return LatchResponse containing the status
+     */
     public LatchResponse history(String accountId, Long from, Long to) {
         return HTTP_GET_proxy(new StringBuilder(API_HISTORY_URL).append("/").append(accountId)
                                                                 .append("/").append(from != null ? String.valueOf(from) :"0")
                                                                 .append("/").append(to != null ? String.valueOf(to) : String.valueOf(new Date().getTime())).toString());
     }
 
+    /**
+     * Add a new operation
+     * @param parentId identifies the parent of the operation to be created
+     * @param name The name of the operation
+     * @param twoFactor Specifies if the Two Factor protection is enabled for this operation
+     * @param lockOnRequest Specifies if the 'Lock latches on status request' feature is disabled, opt-in or mandatory for this operation
+     * @return LatchResponse containing the status
+     */
     public LatchResponse createOperation(String parentId, String name, String twoFactor, String lockOnRequest) {
         Map<String, String> data = new HashMap<String, String>();
         data.put("parentId", parentId);
@@ -284,24 +383,98 @@ public class LatchApp extends LatchAuth {
         return HTTP_PUT_proxy(new StringBuilder(API_OPERATION_URL).toString(), data);
     }
 
+    /**
+     * Remove an operation
+     * @param operationId The operation identifier
+     * @return LatchResponse containing the status
+     */
     public LatchResponse removeOperation(String operationId) {
         return HTTP_DELETE_proxy(new StringBuilder(API_OPERATION_URL).append("/").append(operationId).toString());
     }
 
+    /**
+     * Get information about the operation
+     * @return LatchResponse containing the status
+     */
     public LatchResponse getOperations() {
         return HTTP_GET_proxy(new StringBuilder(API_OPERATION_URL).toString());
     }
 
+    /**
+     * Get information about the operation
+     * @param operationId The operation identifier
+     * @return LatchResponse containing the status
+     */
     public LatchResponse getOperations(String operationId) {
         return HTTP_GET_proxy(new StringBuilder(API_OPERATION_URL).append("/").append(operationId).toString());
     }
 
+    /**
+     * Update an operation
+     * @param operationId The operation identifier
+     * @param name The name of the operation
+     * @param twoFactor Specifies if the Two Factor protection is enabled for this operation
+     * @param lockOnRequest Specifies if the 'Lock latches on status request' feature is disabled, opt-in or mandatory for this operation
+     * @return LatchResponse containing the status
+     */
     public LatchResponse updateOperation(String operationId, String name, String twoFactor, String lockOnRequest) {
         Map<String, String> data = new HashMap<String, String>();
         data.put("name", name);
         data.put("two_factor", twoFactor);
         data.put("lock_on_request", lockOnRequest);
         return HTTP_POST_proxy(new StringBuilder(API_OPERATION_URL).append("/").append(operationId).toString(), data);
+    }
+
+    /**
+     * Create a Time-based one-time password
+     * @param userId User identifier (mail)
+     * @param commonName Name for the Totp
+     * @return LatchResponse containing the status
+     */
+    public LatchResponse createTotp(String userId, String commonName) {
+        Map<String, String> data = new HashMap<String, String>();
+        data.put("userId", userId);
+        data.put("commonName", commonName);
+        return HTTP_POST_proxy(API_TOTP_URL, data);
+    }
+
+    /**
+     * Get data information about the totp
+     * @param totpId Totp Identifier
+     * @return LatchResponse containing the status
+     */
+    public LatchResponse getTotp(String totpId) {
+        return HTTP_GET_proxy(new StringBuilder(API_TOTP_URL).append("/").append(totpId).toString());
+    }
+
+    /**
+     * Validate a code from a totp
+     * @param totpId Totp Identifier
+     * @param code Code generated
+     * @return LatchResponse containing the status
+     */
+    public LatchResponse validateTotp(String totpId, String code) {
+        Map<String, String> data = new HashMap<String, String>();
+        data.put("code", code);
+        return HTTP_POST_proxy(new StringBuilder(API_TOTP_URL).append("/").append(totpId).append("/validate").toString(), data);
+    }
+
+    /**
+     * Remove a totp
+     * @param totpId Totp Identifier
+     * @return LatchResponse containing the status
+     */
+    public LatchResponse removeTotp(String totpId) {
+        return HTTP_DELETE_proxy(new StringBuilder(API_TOTP_URL).append("/").append(totpId).toString());
+    }
+
+    /**
+     * Check operation status
+     * @param controlId Control status identifier
+     * @return LatchResponse containing the status
+     */
+    public LatchResponse checkControlStatus(String controlId) {
+        return HTTP_GET_proxy(new StringBuilder(API_CONTROL_STATUS_CHECK_URL).append("/").append(controlId).toString());
     }
 
 }

@@ -1,5 +1,5 @@
 /*Latch Java SDK - Set of  reusable classes to  allow developers integrate Latch on their applications.
-Copyright (C) 2023 Telefonica Digital
+ Copyright (C) 2024 Telefonica Innovación Digital
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -48,7 +48,7 @@ import com.ning.http.util.Base64;
  */
 public class LatchAuth {
     protected static final String API_VERSION = "2.0";
-    public static String API_HOST = "https://latch.telefonica.com";
+    public static String API_HOST = "https://latch.tu.com";
 
     //App API
     public static final String API_CHECK_STATUS_URL = "/api/"+API_VERSION+"/status";
@@ -60,6 +60,8 @@ public class LatchAuth {
     public static final String API_HISTORY_URL = "/api/"+API_VERSION+"/history";
     public static final String API_OPERATION_URL = "/api/"+API_VERSION+"/operation";
     public static final String API_INSTANCE_URL = "/api/"+API_VERSION+"/instance";
+    public static final String API_TOTP_URL = "/api/" + API_VERSION + "/totps";
+    public static final String API_CONTROL_STATUS_CHECK_URL = "/api/" + API_VERSION + "/control-status";
 
     //User API
     public static final String API_APPLICATION_URL = "/api/"+API_VERSION+"/application";

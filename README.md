@@ -5,9 +5,9 @@
 
 * Java 1.5 or above.
 
-* Read API documentation (https://latch.telefonica.com/www/developers/doc_api).
+* Read API documentation (https://latch.tu.com/www/developers/doc_api).
 
-* To get the "Application ID" and "Secret", (fundamental values for integrating Latch in any application), it’s necessary to register a developer account in Latch's website: https://latch.telefonica.com. On the upper right side, click on "Developer area".
+* To get the "Application ID" and "Secret", (fundamental values for integrating Latch in any application), it’s necessary to register a developer account in Latch's website: https://latch.tu.com. On the upper right side, click on "Developer area".
 
 
 #### CREATING THE JAR DEPENDENCY ####
@@ -62,11 +62,11 @@ You need this additional parameters:
 - WEB3SIGNATURE: A proof-of-ownership signature of a constant, in order to verify that the user owns the private key of the wallet. You can use https://etherscan.io/verifiedSignatures# to sign the following message:
 - MESSAGE TO SIGN : **"Latch-Web3"**
 
-Example of using it [java example](src/test/java/TestExampleWeb3.java)
+Example of using it [java example](src/test/java/ExampleWeb3.java)
 
 
 #### TROUBLESHOOTING ####
 
 *A javax.net.ssl.SSLHandshakeException with a nested sun.security.validator.ValidatorException is thrown when invoking an API call.*
 
-This exception is normally thrown when the JDK doesn't trust the CA that signs the digital certificate used in Latch's website (https://latch.telefonica.com). You may need to install the CA (http://www.startssl.com/certs/ca.pem) as a trusted certificate in your JDK's truststore (normally in jre/lib/security/cacerts) using the keytool utility.
+This exception is normally thrown when the JDK doesn't trust the CA that signs the digital certificate used in Latch's website (https://latch.tu.com). You may need to install the CA (http://www.startssl.com/certs/ca.pem) as a trusted certificate in your JDK's truststore (normally in jre/lib/security/cacerts) using the keytool utility.

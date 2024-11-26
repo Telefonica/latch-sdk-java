@@ -1,5 +1,5 @@
 /*Latch Java SDK - Set of  reusable classes to  allow developers integrate Latch on their applications.
-Copyright (C) 2023 Telefonica Digital
+ Copyright (C) 2024 Telefonica Innovación Digital
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 
-public class TestExampleWeb3 {
+public class ExampleWeb3 {
 
     public static String appId = "<Your appId>";
 
