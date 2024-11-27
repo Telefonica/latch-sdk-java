@@ -26,7 +26,6 @@ public class PairingManualTest {
 
     public static String appId = "<Your appId>";
     public static String secretId = "<your secret id>";
-    public static String accountEmail = "<your email account>";
 
     public static String readInput(String msg) {
         System.out.print(msg);
@@ -111,65 +110,6 @@ public class PairingManualTest {
         }
     }
 
-    public static String pairWithId() {
-        LatchApp latchApp = new LatchApp(appId, secretId);
-
-        String accountId = null;
-        LatchResponse latchResponse = latchApp.pairWithId(accountEmail);
-        if (latchResponse.hasErrors()) {
-            System.out.println(String.format("Error pairing: %s", latchResponse.getError().getMessage()));
-        } else {
-            accountId = latchResponse.getData().get("accountId").getAsString();
-        }
-        return accountId;
-    }
-
-    public static String pairWithIdWithCommonName() {
-        LatchApp latchApp = new LatchApp(appId, secretId);
-        String commonName = readInput("Enter the common name: ");
-
-        String accountId = null;
-        LatchResponse latchResponse = latchApp.pairWithId(accountEmail, commonName);
-        if (latchResponse.hasErrors()) {
-            System.out.println(String.format("Error pairing: %s", latchResponse.getError().getMessage()));
-        } else {
-            accountId = latchResponse.getData().get("accountId").getAsString();
-        }
-        return accountId;
-    }
-
-    public static String pairWithIdWithWeb3() {
-        LatchApp latchApp = new LatchApp(appId, secretId);
-        String web3Wallet = readInput("Enter the wallet for web3: ");
-        String web3Signature = readInput("Enter the signature for web3: ");
-
-        String accountId = null;
-        LatchResponse latchResponse = latchApp.pairWithId(accountEmail, web3Wallet, web3Signature);
-        if (latchResponse.hasErrors()) {
-            System.out.println(String.format("Error pairing: %s", latchResponse.getError().getMessage()));
-        } else {
-            accountId = latchResponse.getData().get("accountId").getAsString();
-        }
-        return accountId;
-    }
-
-    public static String pairWithIdWithWeb3CommonName() {
-        LatchApp latchApp = new LatchApp(appId, secretId);
-        String commonName = readInput("Enter the common name: ");
-        String web3Wallet = readInput("Enter the wallet for web3: ");
-        String web3Signature = readInput("Enter the signature for web3: ");
-
-        String accountId = null;
-        LatchResponse latchResponse = latchApp.pairWithId(accountEmail, commonName, web3Wallet, web3Signature);
-        if (latchResponse.hasErrors()) {
-            System.out.println(String.format("Error pairing: %s", latchResponse.getError().getMessage()));
-        } else {
-            accountId = latchResponse.getData().get("accountId").getAsString();
-        }
-        return accountId;
-    }
-
-
     public static void main(String[] args) {
         String accountId;
         accountId = pair();
@@ -180,15 +120,5 @@ public class PairingManualTest {
         unpair(accountId);
         accountId = pairWithWeb3CommonName();
         unpair(accountId);
-
-        //Only development enviroments
-//        accountId = pairWithId();
-//        unpair(accountId);
-//        accountId = pairWithIdWithCommonName();
-//        unpair(accountId);
-//        accountId = pairWithIdWithWeb3();
-//        unpair(accountId);
-//        accountId = pairWithIdWithWeb3CommonName();
-//        unpair(accountId);
     }
 }
